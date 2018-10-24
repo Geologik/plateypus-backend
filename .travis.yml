@@ -5,4 +5,4 @@ install:
     - 'pip install pipenv'
     - 'pipenv sync' 
 script:
-    - 'pytest'
+    - 'python -m pytest'
