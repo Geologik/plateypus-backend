@@ -9,6 +9,7 @@ flask = "*"
 gunicorn = "*"
 pylint = "*"
 pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
