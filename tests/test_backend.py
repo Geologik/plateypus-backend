@@ -24,16 +24,18 @@ def test_tautology():
     assert 2 + 2 == 4
 
 
-def test_hello(client):
+def test_version(client):
+    """The ``version'' endpoint should return the version defined in the backend."""
     resp = client.get('/')
     assert okay(resp)
 
     result = resp.get_json()
-    expected = dict(Hello='world!')
+    expected = dict(version=backend.VERSION)
     assert result == expected
 
 
 def test_echo(client):
+    """The ``echo'' endpoint should return whatever is sent to it."""
     payload = dict(foo='bar', baz=42)
     resp = client.post('/echo', json=payload)
     assert okay(resp)

@@ -2,12 +2,13 @@
 
 from flask import Flask, jsonify, request
 PLATEYPUS = Flask(__name__)
+VERSION = '0.0.1'
 
 
 @PLATEYPUS.route('/')
-def hello():
-    """Return Hello world! json."""
-    resp = jsonify({'Hello': 'world!'})
+def version():
+    """Return current version number."""
+    resp = jsonify(dict(version=VERSION))
     resp.headers['Cache-Control'] = 'no-cache'
     return resp
 
