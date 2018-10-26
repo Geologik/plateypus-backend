@@ -4,14 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-bandit = "*"
 flask = "*"
 gunicorn = "*"
+requests = "*"
+ftputil = "*"
+progress = "*"
+
+[dev-packages]
+bandit = "*"
+jedi = "*"
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
-
-[dev-packages]
 
 [requires]
 python_version = "3.6"
