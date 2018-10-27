@@ -36,8 +36,10 @@ def update_data():
     fil = _download_if_newer()
     if not fil:
         print('No newer file found. Exiting.')
+        return False
     ## TODO Process file and insert into database
     print('Done.')
+    return True
 
 
 def _download_if_newer():
