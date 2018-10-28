@@ -9,6 +9,7 @@ from ftputil import FTPHost
 from ftputil.file_transfer import MAX_COPY_CHUNK_SIZE
 from progress.bar import Bar
 from requests import get
+from requests.exceptions import ConnectionError
 
 METADATA_URL = 'http://datahub.virk.dk/api/2/rest/package/k-ret-jsdata'
 
@@ -28,7 +29,6 @@ def ls_lt(ftp):
     files = [(ftp.stat(f), f) for f in ftp.listdir(ftp.curdir)]
     files.sort(key=lambda fil: fil[0].st_mtime)
     return files
-
 
 
 def update_data():
