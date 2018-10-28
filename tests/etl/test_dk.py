@@ -4,6 +4,7 @@ from types import SimpleNamespace as obj
 
 from pytest import mark
 from pytest_mock import mocker
+import requests
 
 from plateypus.etl import dk
 
@@ -39,3 +40,8 @@ def test_update_data(mocker):
     dk._download_if_newer.return_value = False
     actual = dk.update_data()
     assert actual == expected
+
+def test_metadata_connection_error():
+    dk.METADATA_URL = 'https://foo.invalid/bar'
+    ftp = dk.dmr_ftp()
+    assert ftp is None
