@@ -1,12 +1,9 @@
 """Test ETL routines for the Danish Motor Register."""
 
-from types import SimpleNamespace as obj
-
 from pytest import mark
 from pytest_mock import mocker
-import requests
 
-from plateypus.etl import dk
+from plateypus.etl.dk import Extract, extract_transform_load
 
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_dmr_ftp():
@@ -15,33 +12,24 @@ def test_dmr_ftp():
     Requires intarwebs, obvs.
     """
     expected = '/ESStatistikListeModtag'
-    ftp = dk.dmr_ftp()
-    actual = ftp.getcwd()
-    ftp.close()
+    extr = Extract()
+    actual = extr.ftp.getcwd()
     assert actual == expected
 
-def test_ls_lt():
-    """Test that a directory is correctly sorted by time modified."""
-    expected = [
-        (obj(st_mtime=309), 'bar'),
-        (obj(st_mtime=317), 'baz'),
-        (obj(st_mtime=324), 'foo'),
-        (obj(st_mtime=467), 'quux')]
-    mock_ftp = obj(curdir='.')
-    mock_ftp.listdir = lambda _: ['foo', 'bar', 'baz', 'quux']
-    mock_ftp.stat = lambda f: obj(st_mtime=sum(map(ord, f)))
-    actual = dk.ls_lt(mock_ftp)
-    assert actual == expected
-
+@mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_update_data(mocker):
     """Test the data update."""
     expected = False
-    mocker.patch.object(dk, '_download_if_newer')
-    dk._download_if_newer.return_value = False
-    actual = dk.update_data()
+    mocker.patch.object(Extract, 'download_if_newer')
+    extr = Extract()
+    extr.download_if_newer.return_value = False
+    actual = extract_transform_load()
     assert actual == expected
 
+@mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_metadata_connection_error():
-    dk.METADATA_URL = 'https://foo.invalid/bar'
-    ftp = dk.dmr_ftp()
-    assert ftp is None
+    """Test that no FTP host is created when trying to open an invalid URL."""
+    extr = Extract()
+    extr.METADATA_URL = 'https://foo.invalid/bar'
+    extr.open_dmr_ftp()
+    assert extr.ftp is None
