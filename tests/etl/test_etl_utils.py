@@ -22,7 +22,7 @@ def test_ftp_connect():
         assert 'readme.txt' in ftp.listdir('/')
     except TemporaryError as tmp_err:
         if tmp_err.errno == 425:
-            warn(tmp_err.strerror, stacklevel=2)
+            warn(tmp_err.strerror)
         else:
             raise
     finally:
