@@ -20,4 +20,4 @@ def echo():
 
 
 if __name__ == '__main__':
-    PLATEYPUS.run()
+    PLATEYPUS.run() # pragma: no cover
