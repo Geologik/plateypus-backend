@@ -1,7 +1,9 @@
 """Test ETL utility methods."""
 
 from types import SimpleNamespace as obj
+from warnings import warn
 
+from ftputil.error import TemporaryError
 from pytest import mark
 
 from plateypus.etl import etl_utils
@@ -18,6 +20,11 @@ def test_ftp_connect():
         assert ftp is not None
         assert cwd == ftp.getcwd()
         assert 'readme.txt' in ftp.listdir('/')
+    except TemporaryError as tmp_err:
+        if tmp_err.errno == 425:
+            warn(tmp_err.strerror, stacklevel=2)
+        else:
+            raise
     finally:
         if ftp:
             ftp.close()
