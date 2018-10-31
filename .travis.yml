@@ -10,5 +10,5 @@ addons:
     sonarcloud:
         organization: 'kristian-thy50409'
 script:
-    - 'python -m pytest --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus'
+    - 'python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus'
     - 'sonar-scanner'
