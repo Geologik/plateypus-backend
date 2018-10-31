@@ -29,6 +29,12 @@ def test_ftp_connect():
         if ftp:
             ftp.close()
 
+@mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
+def test_ftp_noconnect():
+    """Test invalid connection to FTP host."""
+    ftp = etl_utils.ftp_connect('foo', 'bar', 'baz', 'quux')
+    assert ftp is None
+
 def test_ls_lt():
     """Test that a directory is correctly sorted by time modified."""
     expected = [
