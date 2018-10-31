@@ -109,6 +109,10 @@ class Transform:
             if event == 'start-ns':
                 namespace, url = elem
                 nsmap[namespace] = url
+            if event == 'end':
+                # TODO: Build entity
+                print(elem.tag)
+                elem.clear()
         return entities
 
     def xml_pull_events(self):
@@ -120,8 +124,9 @@ class Transform:
             for _, line in enumerate(instream):
                 spinner.next()
                 parser.feed(line)
-            spinner.finish()
             print('\bdone.')
+            parser.close()
+            spinner.finish()
             return parser.read_events()
 
     def xml_stream(self):
@@ -148,4 +153,4 @@ class Load:
         return True
 
 if __name__ == '__main__':
-    extract_transform_load()
+    extract_transform_load() # pragma: no cover
