@@ -5,6 +5,7 @@ from pytest_mock import mocker
 
 from plateypus.etl.dk import Extract, extract_transform_load
 
+
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_dmr_ftp():
     """Test the FTP connection to the DMR.
@@ -16,15 +17,17 @@ def test_dmr_ftp():
     actual = extr.ftp.getcwd()
     assert actual == expected
 
+
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
-def test_update_data(mocker):
-    """Test the data update."""
+def test_no_new_data(mocker):
+    """Test no new data path."""
     expected = False
     mocker.patch.object(Extract, 'download_if_newer')
     extr = Extract()
     extr.download_if_newer.return_value = False
     actual = extract_transform_load()
     assert actual == expected
+
 
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_metadata_connection_error():

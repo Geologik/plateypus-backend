@@ -8,6 +8,7 @@ from pytest import mark
 
 from plateypus.etl import etl_utils
 
+
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_ftp_connect():
     """Test connection to FTP host."""
@@ -19,7 +20,6 @@ def test_ftp_connect():
         ftp = etl_utils.ftp_connect(server, user, passwd, cwd)
         assert ftp is not None
         assert cwd == ftp.getcwd()
-        assert 'readme.txt' in ftp.listdir('/')
     except TemporaryError as tmp_err:
         if tmp_err.errno == 425:
             warn(tmp_err.strerror)
@@ -29,11 +29,13 @@ def test_ftp_connect():
         if ftp:
             ftp.close()
 
+
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
 def test_ftp_noconnect():
     """Test invalid connection to FTP host."""
     ftp = etl_utils.ftp_connect('foo', 'bar', 'baz', 'quux')
     assert ftp is None
+
 
 def test_ls_lt():
     """Test that a directory is correctly sorted by time modified."""
