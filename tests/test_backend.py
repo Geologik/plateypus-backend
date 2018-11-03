@@ -30,7 +30,7 @@ def test_version(client):
     assert okay(resp)
 
     result = resp.get_json()
-    expected = dict(version=backend.VERSION)
+    expected = dict(settings=backend.SETTINGS, version=backend.VERSION)
     assert result == expected
 
 
