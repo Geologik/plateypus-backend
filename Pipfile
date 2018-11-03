@@ -6,15 +6,19 @@ name = "pypi"
 [packages]
 bandit = "*"
 flask = "*"
+flask-migrate = "*"
+flask-script = "*"
+flask-sqlalchemy = "*"
 ftputil = "*"
 gunicorn = "*"
 jedi = "*"
 progress = "*"
+"psycopg2" = "*"
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
-requests = "*"
 pytest-mock = "*"
+requests = "*"
 
 [dev-packages]
 
