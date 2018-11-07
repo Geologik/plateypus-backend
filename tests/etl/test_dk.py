@@ -1,5 +1,7 @@
 """Test ETL routines for the Danish Motor Register."""
 
+from datetime import datetime
+
 from pytest import mark
 from pytest_mock import mocker
 
@@ -24,7 +26,7 @@ def test_no_new_data(mocker):
     expected = False
     mocker.patch.object(Extract, 'download_if_newer')
     extr = Extract()
-    extr.download_if_newer.return_value = False
+    extr.download_if_newer.return_value = (False, datetime.min)
     actual = extract_transform_load()
     assert actual == expected
 

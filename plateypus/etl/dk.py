@@ -5,8 +5,8 @@ from io import TextIOWrapper
 from os.path import join as path_join
 from re import search
 from tempfile import gettempdir
-from xml.etree.ElementTree import XMLPullParser
-from xml.etree.ElementTree import ParseError, iterparse
+from warnings import warn
+from xml.etree.ElementTree import XMLPullParser, tostring
 from zipfile import ZipFile, is_zipfile
 
 from ftputil.file_transfer import MAX_COPY_CHUNK_SIZE
@@ -14,12 +14,16 @@ from progress.bar import Bar
 from progress.spinner import Spinner
 from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
+from sqlalchemy.orm import sessionmaker
 
+from plateypus.backend import DB
+from plateypus.models import Metadata, Vehicle
 from etl_utils import ftp_connect, ls_lt
+
 
 def extract_transform_load():
     """Update DMR entries if newer data dump exists."""
-    dump = Extract().download_if_newer()
+    dump, last_updated = Extract().download_if_newer()
     if not dump:
         print('No newer file found. Exiting.')
         return False
@@ -27,7 +31,7 @@ def extract_transform_load():
     if not entities:
         print('No entities parsed from data dump. Exiting.')
         return False
-    if not Load().insert(entities):
+    if not Load().insert(entities, last_updated):
         print('No data loaded. Exiting.')
     print('Done.')
     return True
@@ -48,21 +52,24 @@ class Extract:
             self.ftp.close()
 
     def download_if_newer(self):
-        """Download latest zipped dump from the DMR if newer than the last downloaded."""
-        return '/mnt/c/Temp/test.zip'                                   # TODO Delete this line! :)
-        return '/mnt/c/Temp/ESStatistikListeModtag-20181015-070837.zip' # TODO Delete this line! :)
+        """Download latest zipped dump from the DMR
+        if newer than the last downloaded."""
+
         newest_file = ls_lt(self.ftp)[-1]
         filename = newest_file[1]
         last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, tz.utc)
+        return '/mnt/c/Temp/test.zip', last_modified
+        # return '/mnt/c/Temp/ESStatistikListeModtag-20181015-070837.zip'
         chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
         if self.newer_than_latest(last_modified):
             target = path_join(gettempdir(), filename)
             indicator = '%(percent).1f%% (done in %(eta_td)s)'
-            progbar = Bar(f'Downloading {filename}', max=chunks, suffix=indicator)
+            progbar = Bar(f'Downloading {filename}',
+                          max=chunks, suffix=indicator)
             self.ftp.download(filename, target, lambda chunk: progbar.next())
             progbar.finish()
-            return target
-        return False
+            return target, last_modified
+        return False, datetime.min
 
     def get_ftp_connection_data(self):
         """Retrieve FTP details for the DMR from the Virk Datahub."""
@@ -80,14 +87,19 @@ class Extract:
 
             return dict(user=tok(1), passwd=tok(2), server=tok(3), cwd=tok(4))
         except RequestsConnectionError:
-            return None # Network connection issue. Hopefully transient!
+            return None  # Network connection issue. Hopefully transient!
         except KeyError:
-            return None # Metadata format probably changed…
+            return None  # Metadata format probably changed…
 
     def newer_than_latest(self, timestamp):
-        """Check whether the given timestamp is newer than the last downloaded dump."""
-        ## TODO Implement when database is done
-        return timestamp < datetime.now(tz.utc)
+        """Check whether the given timestamp is newer
+        than the last downloaded dump."""
+        with sessionmaker(bind=DB.engine)() as session:
+            last_updated = session.query(Metadata) \
+                .filter_by(country='dk')           \
+                .first()                           \
+                .last_updated or datetime.min
+            return timestamp > last_updated
 
     def open_dmr_ftp(self):
         """Connect to the DMR FTP server and set the FTPHost."""
@@ -105,19 +117,49 @@ class Transform:
         """Return a list of entities from the data dump."""
         nsmap = {}
         entities = []
+
+        def get_node_text(elem, node_name):
+            xpath = f'.//ns:{node_name}'
+            count = len(elem.findall(xpath, namespaces=nsmap)) == 1
+            if count == 0:
+                warn(f'Did not find {node_name}')
+                return ''
+            if count > 1:
+                warn(f'Found #{count}# {node_name}')
+            return elem.findtext(xpath, namespaces=nsmap)
+
         for event, elem in self.xml_pull_events():
             if event == 'start-ns':
                 namespace, url = elem
                 nsmap[namespace] = url
             if event == 'end':
-                # TODO: Build entity
-                print(elem.tag)
-                elem.clear()
+                if elem.tag == f'{{{nsmap["ns"]}}}Statistik':
+                    vehicle = Vehicle(
+                        country='dk',
+                        plate=get_node_text(
+                            elem, 'RegistreringNummerNummer'),
+                        first_reg=get_node_text(
+                            elem, 'KoeretoejOplysningFoersteRegistreringDato'),
+                        vin=get_node_text(
+                            elem, 'KoeretoejOplysningStelNummer'),
+                        maker=get_node_text(
+                            elem, 'KoeretoejMaerkeTypeNavn'),
+                        model='{} {}'.format(
+                            get_node_text(elem, 'KoeretoejModelTypeNavn'),
+                            get_node_text(elem, 'KoeretoejVariantTypeNavn')),
+                        fuel_type=get_node_text(
+                            elem, 'DrivkraftTypeNavn'),
+                        colour=get_node_text(
+                            elem, 'FarveTypeNavn'),
+                        raw_xml=tostring(elem, encoding='unicode'))
+                    print(vehicle)
+                    entities.append(vehicle)
+                    elem.clear()
         return entities
 
     def xml_pull_events(self):
         """Return a list of XML parser events from the data dump."""
-        parser = XMLPullParser(['start', 'end', 'start-ns', 'end-ns'])
+        parser = XMLPullParser(['start-ns', 'end'])
         spinner = Spinner('Parsing XML dump … ')
         spinner.next()
         with self.xml_stream() as instream:
@@ -133,24 +175,44 @@ class Transform:
         """Open one-file archive and return a buffered stream
         suitable for plugging into a pull parser."""
         if is_zipfile(self.dump):
-            with ZipFile(self.dump, 'r') as archive:
-                infolist = archive.infolist()
+            with ZipFile(self.dump, 'r') as zipf:
+                infolist = zipf.infolist()
                 if len(infolist) == 1:
-                    return TextIOWrapper(archive.open(infolist[0].filename, 'r'))
+                    return TextIOWrapper(zipf.open(infolist[0].filename, 'r'))
         return None
 
 
 class Load:
     """Methods to insert data into the database."""
 
-    def clean(self):
-        """Delete all old data."""
-        raise NotImplementedError
+    def __init__(self):
+        self.session = sessionmaker(bind=DB.engine)()
 
-    def insert(self, entities):
+    def clean(self):
+        """Delete all Danish vehicles."""
+        count = self.session.query(Vehicle)  \
+                    .filter_by(country='dk') \
+                    .delete(synchronize_session=False)
+        self.session.commit()
+        print(f'> deleted {count} vehicles')
+
+    def insert(self, entities, last_updated):
         """Insert entities into database."""
-        # TODO: Implement!
+        self.clean()
+
+        self.session.add_all(entities)
+        self.session.commit()
+        print(f'> inserted {len(entities)} vehicles')
+
+        dk_meta = self.session.query(Metadata).filter_by(country='dk').first()
+        if dk_meta:
+            dk_meta.last_updated = last_updated
+        else:
+            self.session.add(Metadata(country='dk', last_updated=last_updated))
+        self.session.commit()
+
         return True
 
+
 if __name__ == '__main__':
-    extract_transform_load() # pragma: no cover
+    extract_transform_load()  # pragma: no cover
