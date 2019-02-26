@@ -186,10 +186,10 @@
         },
         "isort": {
             "hashes": [
-                "sha256:44b9054f8774a652563c01d5dca28340a4ca23f9e30b8ea99e28927ddee5876e",
-                "sha256:bbdb9c4d97dcabaa937511f1bf4d2b2bdbf0370053a4b587ad1adf19f83c1a5c"
+                "sha256:6c3110ff0871d3a45f0ba1b8f7cefe38e845887210c80d952479fa7e74e00ad7",
+                "sha256:78ebda8283402dbe15e1fe8dc73e6d72e5d3c6a0c5e8dc489b2a4372280037af"
             ],
-            "version": "==4.3.7"
+            "version": "==4.3.8"
         },
         "itsdangerous": {
             "hashes": [
