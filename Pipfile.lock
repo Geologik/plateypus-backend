@@ -24,10 +24,10 @@
         },
         "astroid": {
             "hashes": [
-                "sha256:1d5d0e6e408701ae657342645465d08be6fb66cf0ede16a31cc6435bd2e61718",
-                "sha256:8fc40235cd184bff5d7b8e1284a647005cbd36bbc87d0c39f6f6389ae26e17ad"
+                "sha256:e02093b94fe512fd38228378b99468c9bacb4d51448952374a1acf9ffa4df3e2",
+                "sha256:f249c424976f0eb6d46ab4101176264ab3375839c81c8f068e3c173d22f2d460"
             ],
-            "version": "==2.2.0"
+            "version": "==2.2.1"
         },
         "atomicwrites": {
             "hashes": [
