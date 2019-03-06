@@ -315,10 +315,9 @@
         },
         "progress": {
             "hashes": [
-                "sha256:5e2f9da88ed8236a76fffbee3ceefd259589cf42dfbc2cec2877102189fae58a"
+                "sha256:69ecedd1d1bbe71bf6313d88d1e6c4d2957b7f1d4f71312c211257f7dae64372"
             ],
-            "index": "pypi",
-            "version": "==1.4"
+            "version": "==1.5"
         },
         "psycopg2-binary": {
             "hashes": [
