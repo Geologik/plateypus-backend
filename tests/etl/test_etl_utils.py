@@ -1,5 +1,6 @@
 """Test ETL utility methods."""
 
+from datetime import datetime, timezone as tz
 from types import SimpleNamespace as obj
 from warnings import warn
 
@@ -49,3 +50,17 @@ def test_ls_lt():
     mock_ftp.stat = lambda f: obj(st_mtime=sum(map(ord, f)))
     actual = etl_utils.ls_lt(mock_ftp)
     assert actual == expected
+
+
+def test_newer_than_latest():
+    """Test whether the timestamp is newer than the one in the database."""
+    assert etl_utils.newer_than_latest(
+        'dk', datetime(1970, 1, 1, tzinfo=tz.utc))
+    assert not etl_utils.newer_than_latest('dk', datetime.now(tz.utc))
+
+
+def test_newer_than_latest_first_run():
+    """Test that newer_than_latest compares to the earliest known time
+    when there is no timestamp for country in the database."""
+    assert etl_utils.newer_than_latest('yy', datetime.now(tz.utc))
+    assert not etl_utils.newer_than_latest('yy', datetime.min)

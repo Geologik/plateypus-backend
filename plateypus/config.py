@@ -5,7 +5,7 @@ import os
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 
-class Config:
+class Config(object):
     """Base (dev) configuration."""
     DEBUG = True
     DEVELOPMENT = True

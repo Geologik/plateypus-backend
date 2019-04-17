@@ -18,7 +18,7 @@ from sqlalchemy.orm import sessionmaker
 
 from plateypus.backend import DB
 from plateypus.models import Metadata, Vehicle
-from etl_utils import ftp_connect, ls_lt
+from etl_utils import ftp_connect, ls_lt, newer_than_latest
 
 
 def extract_transform_load():
@@ -37,7 +37,7 @@ def extract_transform_load():
     return True
 
 
-class Extract:
+class Extract(object):
     """Methods to extract data from the DMR."""
 
     METADATA_URL = 'http://datahub.virk.dk/api/2/rest/package/k-ret-jsdata'
@@ -61,7 +61,7 @@ class Extract:
         return '/mnt/c/Temp/test.zip', last_modified
         # return '/mnt/c/Temp/ESStatistikListeModtag-20181015-070837.zip'
         chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
-        if self.newer_than_latest(last_modified):
+        if newer_than_latest('dk', last_modified):
             target = path_join(gettempdir(), filename)
             indicator = '%(percent).1f%% (done in %(eta_td)s)'
             progbar = Bar(f'Downloading {filename}',
@@ -91,23 +91,13 @@ class Extract:
         except KeyError:
             return None  # Metadata format probably changed…
 
-    def newer_than_latest(self, timestamp):
-        """Check whether the given timestamp is newer
-        than the last downloaded dump."""
-        with sessionmaker(bind=DB.engine)() as session:
-            last_updated = session.query(Metadata) \
-                .filter_by(country='dk')           \
-                .first()                           \
-                .last_updated or datetime.min
-            return timestamp > last_updated
-
     def open_dmr_ftp(self):
         """Connect to the DMR FTP server and set the FTPHost."""
         ftp_conn_data = self.get_ftp_connection_data()
         self.ftp = ftp_conn_data and ftp_connect(**ftp_conn_data)
 
 
-class Transform:
+class Transform(object):
     """Methods to transform extracted data into loadable form."""
 
     def __init__(self, path_to_dump):
@@ -118,6 +108,7 @@ class Transform:
         nsmap = {}
         entities = []
 
+        # TODO move to utils
         def get_node_text(elem, node_name):
             xpath = f'.//ns:{node_name}'
             count = len(elem.findall(xpath, namespaces=nsmap)) == 1
@@ -182,7 +173,7 @@ class Transform:
         return None
 
 
-class Load:
+class Load(object):
     """Methods to insert data into the database."""
 
     def __init__(self):
