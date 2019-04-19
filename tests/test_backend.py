@@ -1,6 +1,7 @@
 """Test the Plateypus backend."""
 
 import pytest
+
 from plateypus import backend
 
 

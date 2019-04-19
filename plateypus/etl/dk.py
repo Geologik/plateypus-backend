@@ -16,9 +16,9 @@ from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
 from sqlalchemy.orm import sessionmaker
 
+from etl_utils import ftp_connect, ls_lt, newer_than_latest
 from plateypus.backend import DB
 from plateypus.models import Metadata, Vehicle
-from etl_utils import ftp_connect, ls_lt, newer_than_latest
 
 
 def extract_transform_load():

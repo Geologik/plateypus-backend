@@ -1,6 +1,6 @@
 """This module contains ORM model definitions."""
 
-from sqlalchemy import Column, BigInteger, Integer, String, Text, TIMESTAMP
+from sqlalchemy import TIMESTAMP, BigInteger, Column, Integer, String, Text
 
 from backend import DB
 

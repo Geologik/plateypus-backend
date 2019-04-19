@@ -2,8 +2,9 @@
 
 from os import environ
 from os.path import join
-from flask import Flask, jsonify, request, send_from_directory
+
 from elasticsearch import Elasticsearch
+from flask import Flask, jsonify, request, send_from_directory
 
 VERSION = '0.0.1'
 
