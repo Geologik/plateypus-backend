@@ -1,1 +1,1 @@
-web: gunicorn plateypus.backend:PLATEYPUS
+web: gunicorn plateypus.backend:app
