@@ -27,7 +27,7 @@ def test_tautology():
 
 def test_version(client):
     """The ``version'' endpoint should return the version defined in the backend."""
-    resp = client.get('/')
+    resp = client.get("/")
     assert okay(resp)
 
     result = resp.get_json()
@@ -37,8 +37,8 @@ def test_version(client):
 
 def test_echo(client):
     """The ``echo'' endpoint should return whatever is sent to it."""
-    payload = dict(foo='bar', baz=42)
-    resp = client.post('/echo', json=payload)
+    payload = dict(foo="bar", baz=42)
+    resp = client.post("/echo", json=payload)
     assert okay(resp)
 
     result = resp.get_json(force=True)

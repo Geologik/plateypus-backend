@@ -33,8 +33,8 @@ def newer_than_latest(country, timestamp):
     """Check whether the given timestamp is newer
     than the last downloaded dump for country."""
     with sessionmaker(bind=DB.engine)() as session:
-        last_updated = session.query(Metadata) \
-            .filter_by(country=country)        \
-            .first()                           \
-            .last_updated or datetime.min
+        last_updated = (
+            session.query(Metadata).filter_by(country=country).first().last_updated
+            or datetime.min
+        )
         return timestamp > last_updated

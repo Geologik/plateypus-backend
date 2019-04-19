@@ -14,7 +14,7 @@ def test_dmr_ftp():
 
     Requires intarwebs, obvs.
     """
-    expected = '/ESStatistikListeModtag'
+    expected = "/ESStatistikListeModtag"
     extr = Extract()
     actual = extr.ftp.getcwd()
     assert actual == expected
@@ -24,7 +24,7 @@ def test_dmr_ftp():
 def test_no_new_data(mocker):
     """Test no new data path."""
     expected = False
-    mocker.patch.object(Extract, 'download_if_newer')
+    mocker.patch.object(Extract, "download_if_newer")
     extr = Extract()
     extr.download_if_newer.return_value = (False, datetime.min)
     actual = extract_transform_load()
@@ -35,6 +35,6 @@ def test_no_new_data(mocker):
 def test_metadata_connection_error():
     """Test that no FTP host is created when trying to open an invalid URL."""
     extr = Extract()
-    extr.METADATA_URL = 'https://foo.invalid/bar'
+    extr.METADATA_URL = "https://foo.invalid/bar"
     extr.open_dmr_ftp()
     assert extr.ftp is None
