@@ -22,7 +22,7 @@ def app_settings():
 def elastic(ssl=False):
     """Return an initialized Elastic client."""
     cfg = app_settings()
-    protocol = ssl and "https" or "http"
+    protocol = "https" if ssl else "http"
     host = cfg["ELASTIC_HOST"]
     port = cfg["ELASTIC_PORT"]
     return Elasticsearch(f"{protocol}://{host}:{port}")
