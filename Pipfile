@@ -20,9 +20,9 @@ gunicorn = "*"
 progress = "*"
 pytest = "*"
 pytest-cov = "*"
+python-dotenv = "*"
 pytest-mock = "*"
 requests = "*"
-python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
