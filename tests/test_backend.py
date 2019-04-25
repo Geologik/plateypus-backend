@@ -1,11 +1,11 @@
 """Test the Plateypus backend."""
 
-import pytest
+from pytest import fixture
 
-from plateypus import backend
+from plateypus import backend, helpers
 
 
-@pytest.fixture
+@fixture
 def client():
     """Yield client fixture.
 
@@ -31,7 +31,11 @@ def test_version(client):
     assert okay(resp)
 
     result = resp.get_json()
-    expected = dict(settings=backend.SETTINGS, version=backend.VERSION)
+    expected = dict(
+        root=backend.PLATEYPUS.root_path,
+        settings=helpers.app_settings(),
+        version=backend.VERSION,
+    )
     assert result == expected
 
 
