@@ -105,11 +105,10 @@
         },
         "elasticsearch-dsl": {
             "hashes": [
-                "sha256:5f43196a3fd91b2eac90f7345e99f92c66004d85a1fd803cdecf756430827231",
-                "sha256:5f80b3b4a6e61db5d273bc57c32a80b2ddbc555afcc122c62c20440c355008be"
+                "sha256:26416f4dd46ceca43d62ef74970d9de4bdd6f4b0f163316f0b432c9e61a08bec",
+                "sha256:f60aea7fd756ac1fbe7ce114bbf4949aefbf495dfe8896640e787c67344f12f6"
             ],
-            "index": "pypi",
-            "version": "==6.3.1"
+            "version": "==6.4.0"
         },
         "flask": {
             "hashes": [
