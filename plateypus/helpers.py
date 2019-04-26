@@ -1,6 +1,6 @@
 """Little helpers."""
 
-from logging import DEBUG, INFO, FileHandler, Formatter, StreamHandler, getLogger
+from logging import DEBUG, FileHandler, Formatter, StreamHandler, getLogger
 from os import environ
 from sys import stdout
 
@@ -9,7 +9,7 @@ from elasticsearch import Elasticsearch
 
 def init_logger(logger=None, lvl=None):
     """Initialize the given logger.
-    
+
     If no logger is passed into the function, the root logger will be retrieved."""
     if logger is None:
         logger = getLogger()
