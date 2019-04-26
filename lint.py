@@ -21,3 +21,4 @@ if isort.returncode == 0:
 
     if black.returncode == 0:
         run(["pylint", "--jobs=0", "plateypus"])
+        run(["bandit", "--recursive", "--format", "txt", "plateypus"])

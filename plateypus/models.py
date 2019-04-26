@@ -1,42 +1,38 @@
-"""This module contains ORM model definitions."""
+"""This module contains ODM model definitions."""
 
-from sqlalchemy import TIMESTAMP, BigInteger, Column, Integer, String, Text
+from elasticsearch_dsl import Date, Document, Keyword, Text
 
-from backend import DB
+INDEX_METADATA = "plateypus-metadata"
+INDEX_VEHICLES = "plateypus-vehicles"
 
 
-class Metadata(DB.Model):
+class Metadata(Document):
     """Represents metadata for the application state."""
 
-    __tablename__ = "plateypus_metadata"
+    country = Keyword(required=True)
+    last_updated = Date()
 
-    id = Column(Integer, primary_key=True)
-    country = Column(String(2), unique=True)
-    last_updated = Column(TIMESTAMP(timezone=True))
-
-    def __repr__(self):
-        return f"<Metadata {self.country}[{self.last_updated}]>"
+    class Index:  # pylint: disable=missing-docstring,too-few-public-methods
+        name = INDEX_METADATA
 
 
-class Vehicle(DB.Model):
+class Vehicle(Document):
     """Represents a vehicle."""
 
-    __tablename__ = "plateypus_vehicle"
+    country = Keyword(required=True)
+    plate = Text(required=True)
+    first_reg = Text()
+    vin = Text()
+    maker = Text()
+    model = Text()
+    fuel_type = Text()
+    colour = Text()
+    raw_xml = Text()
 
-    id = Column(BigInteger, primary_key=True)
-    country = Column(String(2))
-    plate = Column(String(24))
-    first_reg = Column(String(24))
-    vin = Column(String(24))
-    maker = Column(String(128))
-    model = Column(String(128))
-    fuel_type = Column(String(128))
-    colour = Column(String(128))
-    raw_xml = Column(Text)
-
-    def __repr__(self):
-        return f"<Vehicle {self.country}[{self.plate}]>"
+    class Index:  # pylint: disable=missing-docstring,too-few-public-methods
+        name = INDEX_VEHICLES
 
 
-if __name__ == "__main__":
-    DB.create_all()  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
+    Metadata.init()
+    Vehicle.init()
