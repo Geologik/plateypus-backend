@@ -34,7 +34,7 @@ def test_version(client):
     expected = dict(
         root=backend.PLATEYPUS.root_path,
         settings=helpers.app_settings(),
-        version=backend.VERSION,
+        version=str(backend.VERSION),
     )
     assert result == expected
 

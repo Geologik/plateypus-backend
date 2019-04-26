@@ -1,5 +1,6 @@
 """Test the helpers module."""
 
+from logging import WARNING, DEBUG
 from os import environ
 
 from pytest import fixture, mark
@@ -7,22 +8,31 @@ from shortuuid import uuid
 
 from plateypus import helpers
 
-CACHE_DEFAULT_TIMEOUT = "123"
+CACHE_DEFAULT_TIMEOUT = 123
 CACHE_TYPE = "simple"
 ELASTIC_HOST = "localhost"
 ELASTIC_PORT = "9200"
-FLASK_SECRET_KEY = "12345"
-TESTING = "False"
+FLASK_SECRET_KEY = uuid()
+TESTING = False
 
 
 @fixture
 def set_env():
-    environ["CACHE_DEFAULT_TIMEOUT"] = CACHE_DEFAULT_TIMEOUT
-    environ["CACHE_TYPE"] = CACHE_TYPE
-    environ["ELASTIC_HOST"] = ELASTIC_HOST
-    environ["ELASTIC_PORT"] = ELASTIC_PORT
-    environ["FLASK_SECRET_KEY"] = FLASK_SECRET_KEY
-    environ["TESTING"] = TESTING
+    environ["CACHE_DEFAULT_TIMEOUT"] = str(CACHE_DEFAULT_TIMEOUT)
+    environ["CACHE_TYPE"] = str(CACHE_TYPE)
+    environ["ELASTIC_HOST"] = str(ELASTIC_HOST)
+    environ["ELASTIC_PORT"] = str(ELASTIC_PORT)
+    environ["FLASK_SECRET_KEY"] = str(FLASK_SECRET_KEY)
+    environ["LOG_LEVEL"] = str(WARNING)
+    environ["TESTING"] = str(TESTING)
+
+
+def test_init_logger(set_env):
+    logger = helpers.init_logger()
+    assert logger.getEffectiveLevel() == WARNING
+    environ["LOG_LEVEL"] = str(DEBUG)
+    logger = helpers.init_logger()
+    assert logger.getEffectiveLevel() == DEBUG
 
 
 def test_get_setting():
@@ -37,9 +47,7 @@ def test_app_settings(set_env):
     cfg = helpers.app_settings()
     assert cfg["CACHE_DEFAULT_TIMEOUT"] == CACHE_DEFAULT_TIMEOUT
     assert cfg["CACHE_TYPE"] == CACHE_TYPE
-    assert cfg["ELASTIC_HOST"] == ELASTIC_HOST
-    assert cfg["ELASTIC_PORT"] == ELASTIC_PORT
-    assert cfg["FLASK_SECRET_KEY"] == FLASK_SECRET_KEY
+    assert cfg["SECRET_KEY"] == FLASK_SECRET_KEY
     assert cfg["TESTING"] == TESTING
 
 
