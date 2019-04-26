@@ -13,8 +13,8 @@ python-dotenv = "*"
 rope = "*"
 
 [packages]
-elasticsearch = ">=6.0.0,<7.0.0"
-elasticsearch-dsl = ">=6.0.0,<7.0.0"
+elasticsearch = ">=7.0.0"
+elasticsearch-dsl = ">=7.0.0"
 flask = "*"
 flask-caching = "*"
 ftputil = "*"
