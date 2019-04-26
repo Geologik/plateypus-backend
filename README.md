@@ -35,5 +35,5 @@ Script   | Description
 `debug`  | Execute unit tests, dropping to the `pdb` debugger on the first error. *Windows only.*
 `flask`  | Start the development server.
 `keygen` | Generate a key suitable for use with the `FLASK_SECRET_KEY` setting.
-`lint`   | Run various analysis tools and linters: `isort`, `black`, `bandit` and `pylint`.
+`lint`   | Run a chain of analysis tools and linters: `isort` → `black` → `pylint` → `bandit`.
 `test`   | Execute unit tests and calculate code coverage. *Windows only.* |
