@@ -11,4 +11,5 @@ addons:
         organization: 'kristian-thy50409'
 script:
     - 'python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus'
+    - 'codecov'
     - 'sonar-scanner'

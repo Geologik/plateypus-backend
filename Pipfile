@@ -13,6 +13,7 @@ python-dotenv = "*"
 rope = "*"
 
 [packages]
+codecov = "*"
 elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
 flask = "*"
@@ -33,6 +34,7 @@ python_version = "3.7"
 
 [scripts]
 debug = "cmd /C \"SET APP_SETTINGS=config.TestingConfig&& python -m pytest -x --pdb\""
+elastic = "python elastic.py"
 flask = "python plateypus/backend.py"
 keygen = "python -c \"import secrets; print(secrets.token_urlsafe(16))\""
 lint = "python lint.py"
