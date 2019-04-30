@@ -1,4 +1,4 @@
-"""This module contains ODM model definitions."""
+"""ODM model definitions."""
 
 from elasticsearch_dsl import Date, Document, Keyword, Text
 
