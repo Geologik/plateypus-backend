@@ -3,7 +3,7 @@
 from logging import DEBUG, WARNING
 from os import environ
 
-from pytest import fixture, mark
+from pytest import fixture
 from shortuuid import uuid
 
 from plateypus import helpers
@@ -13,7 +13,7 @@ CACHE_TYPE = "simple"
 ELASTIC_HOST = "localhost"
 ELASTIC_PORT = "9200"
 FLASK_SECRET_KEY = uuid()
-TESTING = False
+TESTING = True
 
 
 @fixture
@@ -23,8 +23,8 @@ def set_env():
     environ["ELASTIC_HOST"] = str(ELASTIC_HOST)
     environ["ELASTIC_PORT"] = str(ELASTIC_PORT)
     environ["FLASK_SECRET_KEY"] = str(FLASK_SECRET_KEY)
+    environ["FLASK_TESTING"] = str(TESTING)
     environ["LOG_LEVEL"] = str(WARNING)
-    environ["TESTING"] = str(TESTING)
 
 
 def test_init_logger(set_env):
@@ -52,18 +52,20 @@ def test_app_settings(set_env):
 
 
 def test_elastic_default(set_env):
-    es = helpers.elastic()
-    assert str(es) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
+    with helpers.elastic() as client:
+        assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
 
 
-def test_elastic_explicit_no_ssl(set_env):
-    es = helpers.elastic(False)
-    assert str(es) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
+# def test_elastic_explicit_no_ssl(set_env):
+#     environ["ELASTIC_PROTOCOL"] = "http"
+#     with helpers.elastic() as client:
+#         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
+#     del environ["ELASTIC_PROTOCOL"]
 
 
-def test_elastic_ssl(set_env):
-    es = helpers.elastic(True)
-    assert (
-        str(es)
-        == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
-    )
+# def test_elastic_ssl(set_env):
+#     environ["ELASTIC_PROTOCOL"] = "https"
+#     with helpers.elastic() as client:
+#         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
+#     #del environ["ELASTIC_PROTOCOL"]
+#     environ["ELASTIC_PROTOCOL"] = "http"
