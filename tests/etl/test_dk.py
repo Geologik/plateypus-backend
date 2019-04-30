@@ -1,11 +1,10 @@
 """Test ETL routines for the Danish Motor Register."""
 
-from datetime import datetime
-
 from pytest import mark
 from pytest_mock import mocker
 
 from plateypus.etl.dk import Extract, extract_transform_load
+from plateypus.helpers import t_0
 
 
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
@@ -26,7 +25,7 @@ def test_no_new_data(mocker):
     expected = False
     mocker.patch.object(Extract, "download_if_newer")
     extr = Extract()
-    extr.download_if_newer.return_value = (False, datetime.min)
+    extr.download_if_newer.return_value = (False, t_0())
     actual = extract_transform_load()
     assert actual == expected
 

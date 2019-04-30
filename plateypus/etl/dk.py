@@ -1,6 +1,6 @@
 """Load data from the Danish Motor Register (DMR)."""
 
-from datetime import datetime, timezone as tz
+from datetime import datetime
 from io import TextIOWrapper
 from os.path import join as path_join
 from re import search
@@ -12,17 +12,19 @@ from zipfile import ZipFile, is_zipfile
 from ftputil.file_transfer import MAX_COPY_CHUNK_SIZE
 from progress.bar import Bar
 from progress.spinner import Spinner
+from pytz import utc
 from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
-
-from plateypus.helpers import elastic, init_logger
-from plateypus.models import Metadata, Vehicle
 
 try:
     from etl_utils import ftp_connect, ls_lt, newer_than_latest
 except (ImportError, ModuleNotFoundError):
     from plateypus.etl.etl_utils import ftp_connect, ls_lt, newer_than_latest
+finally:
+    from plateypus.helpers import elastic, init_logger, t_0
+    from plateypus.models import Metadata, Vehicle
 
+DK = "dk"
 LOG = init_logger("plateypus.etl")
 
 
@@ -62,18 +64,18 @@ class Extract:
 
         newest_file = ls_lt(self.ftp)[-1]
         filename = newest_file[1]
-        last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, tz.utc)
-        return "/mnt/c/Temp/test.zip", last_modified
-        # return '/mnt/c/Temp/ESStatistikListeModtag-20181015-070837.zip'
+        last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, utc)
+        return "C:/Temp/test.zip", last_modified
+        # return "C:/Temp/ESStatistikListeModtag-20181015-070837.zip"
         chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
-        if newer_than_latest("dk", last_modified):
+        if newer_than_latest(DK, last_modified):
             target = path_join(gettempdir(), filename)
             indicator = "%(percent).1f%% (done in %(eta_td)s)"
             progbar = Bar(f"Downloading {filename}", max=chunks, suffix=indicator)
             self.ftp.download(filename, target, lambda chunk: progbar.next())
             progbar.finish()
             return target, last_modified
-        return False, datetime.min
+        return False, t_0()
 
     def get_ftp_connection_data(self):
         """Retrieve FTP details for the DMR from the Virk Datahub."""
@@ -130,7 +132,7 @@ class Transform:
             if event == "end":
                 if elem.tag == f'{{{nsmap["ns"]}}}Statistik':
                     vehicle = Vehicle(
-                        country="dk",
+                        country=DK,
                         plate=get_node_text(elem, "RegistreringNummerNummer"),
                         first_reg=get_node_text(
                             elem, "KoeretoejOplysningFoersteRegistreringDato"
@@ -178,33 +180,27 @@ class Transform:
 class Load:
     """Methods to insert data into the database."""
 
-    def __init__(self):
-        self.elastic = elastic()
-
     def clean(self):
         """Delete all Danish vehicles."""
-        count = (
-            self.session.query(Vehicle)
-            .filter_by(country="dk")
-            .delete(synchronize_session=False)
-        )
-        self.session.commit()
-        LOG.info("> deleted %i vehicles", count)
+        with elastic() as client:
+            vehicles = Vehicle.search(using=client).filter("term", country=DK)
+            LOG.info("> deleting %i vehicles", vehicles.count())
+            vehicles.delete()
 
     def insert(self, entities, last_updated):
         """Insert entities into database."""
         self.clean()
 
-        self.session.add_all(entities)
-        self.session.commit()
-        LOG.info("> inserted %i vehicles", len(entities))
+        with elastic() as client:
+            for entity in entities:
+                entity.save(using=client)
+            LOG.info("> inserted %i vehicles", len(entities))
 
-        dk_meta = self.session.query(Metadata).filter_by(country="dk").first()
-        if dk_meta:
-            dk_meta.last_updated = last_updated
-        else:
-            self.session.add(Metadata(country="dk", last_updated=last_updated))
-        self.session.commit()
+            try:
+                meta_dk = Metadata.search(using=client).filter("term", country=DK)
+                meta_dk.execute()[0].update(using=client, last_updated=last_updated)
+            except IndexError:
+                Metadata(country=DK, last_updated=last_updated).save(using=client)
 
         return True
 
