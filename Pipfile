@@ -13,7 +13,6 @@ python-dotenv = "*"
 rope = "*"
 
 [packages]
-codecov = "*"
 elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
 flask = "*"

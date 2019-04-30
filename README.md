@@ -2,6 +2,7 @@
 
 [![Python 3](https://pyup.io/repos/github/Geologik/plateypus-backend/python-3-shield.svg)](https://pyup.io/repos/github/Geologik/plateypus-backend/)
 [![Build Status](https://travis-ci.org/Geologik/plateypus-backend.svg?branch=master)](https://travis-ci.org/Geologik/plateypus-backend)
+[![Codecov Status](https://codecov.io/gh/Geologik/plateypus-backend/branch/master/graph/badge.svg)](https://codecov.io/gh/Geologik/plateypus-backend)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=plateypus-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=plateypus-backend)
 [![Requirements Status](https://requires.io/github/Geologik/plateypus-backend/requirements.svg?branch=master)](https://requires.io/github/Geologik/plateypus-backend/requirements/?branch=master)
 [![Updates](https://pyup.io/repos/github/Geologik/plateypus-backend/shield.svg)](https://pyup.io/repos/github/Geologik/plateypus-backend/)
@@ -15,6 +16,7 @@ The Plateypus backend is configured using environment variables. User-controllab
 
 | Key                     | Description | Default |
 | ----------------------- | ----------- | ------- |
+| `APM_PATH`              | Path to a folder containing the `apm-server` executable. Only intended for use in a development environment. | |
 | `CACHE_DEFAULT_TIMEOUT` | Cache default timeout in seconds. | `600` |
 | `CACHE_REDIS_URL`       | URL to connect to Redis server, e.g. `redis://usr:pwd@localhost:6379/2`. Only used if `CACHE_TYPE` is `redis`. | |
 | `CACHE_TYPE`            | Specifies which type of caching to use. See [Configuring Flask-Caching](https://flask-caching.readthedocs.io/en/latest/#configuring-flask-caching) for more information. Supported values are `null`, `simple` and `redis`. | `null` |
@@ -30,10 +32,11 @@ The Plateypus backend is configured using environment variables. User-controllab
 
 The project's `Pipfile` defines a number of scripts, which can be run in a command prompt by typing `pipenv run <script>`.
 
-Script   | Description
--------- | -----------
-`debug`  | Execute unit tests, dropping to the `pdb` debugger on the first error. *Windows only.*
-`flask`  | Start the development server.
-`keygen` | Generate a key suitable for use with the `FLASK_SECRET_KEY` setting.
-`lint`   | Run a chain of analysis tools and linters: `isort` → `black` → `pylint` → `bandit`.
-`test`   | Execute unit tests and calculate code coverage. *Windows only.* |
+Script    | Description
+--------- | -----------
+`debug`   | Execute unit tests, dropping to the `pdb` debugger on the first error. *Windows only.*
+`elastic` | Start clean dockerized [Elasticsearch](https://elastic.co/products/elasticsearch) and [Kibana](https://elastic.co/products/kibana) servers, as well as an [APM Server](https://elastic.co/solutions/apm) if the `APM_PATH` environment variable is set.
+`flask`   | Start a local development server.
+`keygen`  | Generate a key suitable for use with the `FLASK_SECRET_KEY` setting.
+`lint`    | Run a chain of analysis tools and linters: `isort` → `black` → `pylint` → `bandit`.
+`test`    | Execute unit tests and calculate code coverage. *Windows only.* |
