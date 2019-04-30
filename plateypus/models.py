@@ -2,6 +2,12 @@
 
 from elasticsearch_dsl import Date, Document, Keyword, Text
 
+try:
+    from helpers import elastic
+except (ImportError, ModuleNotFoundError):
+    from plateypus.helpers import elastic
+
+
 INDEX_METADATA = "plateypus-metadata"
 INDEX_VEHICLES = "plateypus-vehicles"
 
@@ -34,5 +40,6 @@ class Vehicle(Document):
 
 
 if __name__ == "__main__":  # pragma: no cover
-    Metadata.init()
-    Vehicle.init()
+    with elastic() as client:
+        Metadata.init(using=client)
+        Vehicle.init(using=client)
