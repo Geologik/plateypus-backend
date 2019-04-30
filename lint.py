@@ -1,3 +1,5 @@
+"""Run a chain of analysis tools and linters: isort → black → pylint → bandit."""
+
 from subprocess import run
 
 if __name__ == "__main__":
@@ -21,5 +23,5 @@ if __name__ == "__main__":
         black = run(["black", "."])
 
         if black.returncode == 0:
-            run(["pylint", "--jobs=0", "plateypus"])
+            run(["pylint", "plateypus"])
             run(["bandit", "--recursive", "--format", "txt", "plateypus"])
