@@ -62,7 +62,7 @@ def test_elastic_explicit_no_ssl(set_env):
 
 
 def test_elastic_ssl(set_env):
-    es = helpers.elastic()
+    es = helpers.elastic(True)
     assert (
         str(es)
         == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
