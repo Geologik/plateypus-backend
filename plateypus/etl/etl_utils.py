@@ -1,13 +1,10 @@
 """Utility methods for ETL routines."""
 
-from datetime import datetime
-
-from dateutil.parser import parse as parse_date
-from elasticsearch_dsl import Search
 from ftputil import FTPHost
 from ftputil.error import FTPOSError
 
-from plateypus.models import INDEX_METADATA
+from plateypus.helpers import elastic, t_0
+from plateypus.models import Metadata
 
 
 def ftp_connect(server, user, passwd, cwd):
@@ -27,12 +24,13 @@ def ls_lt(ftp):
     return files
 
 
-def newer_than_latest(elastic, country, timestamp):
+def newer_than_latest(country, timestamp):
     """Check whether the given timestamp is newer than the last downloaded dump for country."""
-    last_updated = datetime.min
+    last_updated = t_0()
 
-    search = Search(using=elastic, index=INDEX_METADATA).filter("term", country=country)
-    if search.count() > 0:
-        last_updated = parse_date(search.execute()[0].last_updated)
+    with elastic() as client:
+        search = Metadata.search(using=client).filter("term", country=country)
+        if search.count() > 0:
+            last_updated = search.execute()[0].last_updated
 
     return timestamp > last_updated

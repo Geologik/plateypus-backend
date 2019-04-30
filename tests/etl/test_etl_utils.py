@@ -1,13 +1,15 @@
 """Test ETL utility methods."""
 
-from datetime import datetime, timezone as tz
+from datetime import datetime
 from types import SimpleNamespace as obj
 from warnings import warn
 
 from ftputil.error import TemporaryError
 from pytest import mark
+from pytz import utc
 
 from plateypus.etl import etl_utils
+from plateypus.helpers import t_0
 
 
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
@@ -55,12 +57,12 @@ def test_ls_lt():
 
 def test_newer_than_latest():
     """Test whether the timestamp is newer than the one in the database."""
-    assert etl_utils.newer_than_latest("dk", datetime(1970, 1, 1, tzinfo=tz.utc))
-    assert not etl_utils.newer_than_latest("dk", datetime.now(tz.utc))
+    assert etl_utils.newer_than_latest("dk", datetime(1970, 1, 1, tzinfo=utc))
+    assert not etl_utils.newer_than_latest("dk", datetime.now(utc))
 
 
 def test_newer_than_latest_first_run():
     """Test that newer_than_latest compares to the earliest known time
     when there is no timestamp for country in the database."""
-    assert etl_utils.newer_than_latest("yy", datetime.now(tz.utc))
-    assert not etl_utils.newer_than_latest("yy", datetime.min)
+    assert etl_utils.newer_than_latest("yy", datetime.now(utc))
+    assert not etl_utils.newer_than_latest("yy", t_0())
