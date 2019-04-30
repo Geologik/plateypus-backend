@@ -15,6 +15,7 @@ services:
 before_script:
     - 'sleep 10' # https://docs.travis-ci.com/user/database-setup/#elasticsearch
 script:
+    - 'python plateypus/models.py'
     - 'python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus'
     - 'sonar-scanner'
 after_success:
