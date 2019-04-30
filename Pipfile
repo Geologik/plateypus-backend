@@ -25,6 +25,7 @@ pytest = "*"
 pytest-cov = "*"
 pytest-mock = "*"
 python-dateutil = "*"
+pytz = "*"
 requests = "*"
 shortuuid = "*"
 
