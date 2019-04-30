@@ -1,6 +1,6 @@
 """Test the helpers module."""
 
-from logging import WARNING, DEBUG
+from logging import DEBUG, WARNING
 from os import environ
 
 from pytest import fixture, mark
