@@ -1,10 +1,43 @@
 """Little helpers."""
 
+
+from contextlib import contextmanager
+from datetime import datetime
 from logging import DEBUG, FileHandler, Formatter, StreamHandler, getLogger
 from os import environ
 from sys import stdout
 
 from elasticsearch import Elasticsearch
+from pytz import utc
+
+
+def app_settings():
+    """Retrieve app settings from environment."""
+    return dict(
+        CACHE_DEFAULT_TIMEOUT=int(get_setting("CACHE_DEFAULT_TIMEOUT", "600")),
+        CACHE_TYPE=get_setting("CACHE_TYPE", "null"),
+        SECRET_KEY=get_setting("FLASK_SECRET_KEY"),
+        TESTING=(get_setting("FLASK_TESTING", "False").capitalize() == "True"),
+    )
+
+
+@contextmanager
+def elastic():
+    """Return an initialized Elastic client."""
+    host = get_setting("ELASTIC_HOST", "localhost")
+    port = get_setting("ELASTIC_PORT", "9200")
+    protocol = get_setting("ELASTIC_PROTOCOL", "http")
+    if protocol == "https":
+        raise NotImplementedError
+    yield Elasticsearch(f"{protocol}://{host}:{port}")
+
+
+def get_setting(key, default=None):
+    """Return the env setting corresponding to the given key.
+
+    If key is not found, return the default value.
+    """
+    return environ.get(key) or default
 
 
 def init_logger(logger=None, lvl=None):
@@ -37,27 +70,6 @@ def init_logger(logger=None, lvl=None):
     return logger
 
 
-def get_setting(key, default=None):
-    """Return the env setting corresponding to the given key.
-
-    If key is not found, return the default value.
-    """
-    return environ.get(key) or default
-
-
-def app_settings():
-    """Retrieve app settings from environment."""
-    return dict(
-        CACHE_DEFAULT_TIMEOUT=int(get_setting("CACHE_DEFAULT_TIMEOUT", "600")),
-        CACHE_TYPE=get_setting("CACHE_TYPE", "null"),
-        SECRET_KEY=get_setting("FLASK_SECRET_KEY"),
-        TESTING=(get_setting("FLASK_TESTING", "False").capitalize() == "True"),
-    )
-
-
-def elastic(ssl=False):
-    """Return an initialized Elastic client."""
-    protocol = "https" if ssl else "http"
-    host = get_setting("ELASTIC_HOST", "localhost")
-    port = get_setting("ELASTIC_PORT", "9200")
-    return Elasticsearch(f"{protocol}://{host}:{port}")
+def t_0():
+    """Return a timezone-aware ``datetime'' object representing the dawn of time."""
+    return datetime.min.replace(tzinfo=utc)
