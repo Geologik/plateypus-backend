@@ -22,6 +22,7 @@ The Plateypus backend is configured using environment variables. User-controllab
 | `CACHE_TYPE`            | Specifies which type of caching to use. See [Configuring Flask-Caching](https://flask-caching.readthedocs.io/en/latest/#configuring-flask-caching) for more information. Supported values are `null`, `simple` and `redis`. | `null` |
 | `ELASTIC_HOST`          | Base URL or IP of the Elasticsearch server to use. | `localhost` |
 | `ELASTIC_PORT`          | Elasticsearch server port. | `9200` |
+| `ELASTIC_PROTOCOL`      | Elasticsearch server protocol. | `http` |
 | `FLASK_ENV`             | Controls whether the app is running in development or production mode. Supported values are `development` and `production`. | `production` |
 | `FLASK_SECRET_KEY`      | For session support, a secret key must be set. You may generate a new key with `pipenv run keygen`. | |
 | `FLASK_TESTING`         | Enable testing mode. Exceptions are propagated rather than handled by the the app's error handlers. Supported values are `True` and `False` (case-insensitive). | `False` |
