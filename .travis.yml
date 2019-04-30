@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 sudo: required
 language: python
 python: 
@@ -6,10 +6,14 @@ python:
 install:
     - 'pip install --user codecov'
     - 'pip install pipenv'
-    - 'pipenv sync' 
+    - 'pipenv sync'
 addons:
     sonarcloud:
         organization: 'kristian-thy50409'
+services:
+    - 'elasticsearch'
+before_script:
+    - 'sleep 10' # https://docs.travis-ci.com/user/database-setup/#elasticsearch
 script:
     - 'python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus'
     - 'sonar-scanner'
