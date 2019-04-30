@@ -14,30 +14,35 @@ from progress.bar import Bar
 from progress.spinner import Spinner
 from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
-from sqlalchemy.orm import sessionmaker
 
-from etl_utils import ftp_connect, ls_lt, newer_than_latest
-from plateypus.backend import DB
+from plateypus.helpers import elastic, init_logger
 from plateypus.models import Metadata, Vehicle
+
+try:
+    from etl_utils import ftp_connect, ls_lt, newer_than_latest
+except (ImportError, ModuleNotFoundError):
+    from plateypus.etl.etl_utils import ftp_connect, ls_lt, newer_than_latest
+
+LOG = init_logger("plateypus.etl")
 
 
 def extract_transform_load():
     """Update DMR entries if newer data dump exists."""
     dump, last_updated = Extract().download_if_newer()
     if not dump:
-        print("No newer file found. Exiting.")
+        LOG.info("No newer file found. Exiting.")
         return False
     entities = Transform(dump).build_from_xml()
     if not entities:
-        print("No entities parsed from data dump. Exiting.")
+        LOG.info("No entities parsed from data dump. Exiting.")
         return False
     if not Load().insert(entities, last_updated):
-        print("No data loaded. Exiting.")
-    print("Done.")
+        LOG.info("No data loaded. Exiting.")
+    LOG.info("Done.")
     return True
 
 
-class Extract(object):
+class Extract:
     """Methods to extract data from the DMR."""
 
     METADATA_URL = "http://datahub.virk.dk/api/2/rest/package/k-ret-jsdata"
@@ -96,7 +101,7 @@ class Extract(object):
         self.ftp = ftp_conn_data and ftp_connect(**ftp_conn_data)
 
 
-class Transform(object):
+class Transform:
     """Methods to transform extracted data into loadable form."""
 
     def __init__(self, path_to_dump):
@@ -140,7 +145,7 @@ class Transform(object):
                         colour=get_node_text(elem, "FarveTypeNavn"),
                         raw_xml=tostring(elem, encoding="unicode"),
                     )
-                    print(vehicle)
+                    LOG.debug(vehicle)
                     entities.append(vehicle)
                     elem.clear()
         return entities
@@ -170,11 +175,11 @@ class Transform(object):
         return None
 
 
-class Load(object):
+class Load:
     """Methods to insert data into the database."""
 
     def __init__(self):
-        self.session = sessionmaker(bind=DB.engine)()
+        self.elastic = elastic()
 
     def clean(self):
         """Delete all Danish vehicles."""
@@ -184,7 +189,7 @@ class Load(object):
             .delete(synchronize_session=False)
         )
         self.session.commit()
-        print(f"> deleted {count} vehicles")
+        LOG.info("> deleted %i vehicles", count)
 
     def insert(self, entities, last_updated):
         """Insert entities into database."""
@@ -192,7 +197,7 @@ class Load(object):
 
         self.session.add_all(entities)
         self.session.commit()
-        print(f"> inserted {len(entities)} vehicles")
+        LOG.info("> inserted %i vehicles", len(entities))
 
         dk_meta = self.session.query(Metadata).filter_by(country="dk").first()
         if dk_meta:
