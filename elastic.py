@@ -1,3 +1,7 @@
+"""Start clean dockerized Elasticsearch and Kibana servers,
+as well as an APM Server if the APM_PATH environment variable is set.
+"""
+
 from os import environ
 from subprocess import run
 
