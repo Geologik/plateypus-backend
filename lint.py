@@ -2,8 +2,14 @@
 
 from subprocess import run
 
+def run_with_separator(args):
+    """Print a horizontal rule to console and run a subprocess."""
+    print("=" * 80)
+    return run(args)
+
+
 if __name__ == "__main__":
-    isort = run(
+    isort = run_with_separator(
         [
             "isort",
             "--apply",
@@ -20,8 +26,10 @@ if __name__ == "__main__":
     )
 
     if isort.returncode == 0:
-        black = run(["black", "."])
+        black = run_with_separator(["black", "."])
 
         if black.returncode == 0:
-            run(["pylint", "plateypus"])
-            run(["bandit", "--recursive", "--format", "txt", "plateypus"])
+            run_with_separator(["pylint", "plateypus"])
+            run_with_separator(
+                ["bandit", "--recursive", "--format", "txt", "plateypus"]
+            )
