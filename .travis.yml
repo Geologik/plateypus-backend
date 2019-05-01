@@ -3,22 +3,13 @@ sudo: required
 language: python
 python: 
     - '3.7'
-services:
-    - elasticsearch
+#services:
+#    - elasticsearch
 before_install:
-    - sudo cat /etc/elasticsearch/jvm.options
-    - sudo cat /etc/elasticsearch/log4j2.properties
-    - sudo cat /etc/default/elasticsearch
-    - sudo cat /etc/init.d/elasticsearch
-    - sudo systemctl stop elasticsearch &&
-      curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.0-amd64.deb &&
+    - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.0-amd64.deb &&
       sudo dpkg -i --force-confnew elasticsearch-7.0.0-amd64.deb &&
-      sudo systemctl restart elasticsearch
+      sudo systemctl start elasticsearch
     - sudo systemctl status elasticsearch
-    - sudo cat /etc/elasticsearch/jvm.options
-    - sudo cat /etc/elasticsearch/log4j2.properties
-    - sudo cat /etc/default/elasticsearch
-    - sudo cat /etc/init.d/elasticsearch
 install:
     - pip install codecov
     - pip install pipenv
@@ -27,7 +18,7 @@ addons:
     sonarcloud:
         organization: kristian-thy50409
 before_script:
-    - 'sleep 10' # https://docs.travis-ci.com/user/database-setup/#elasticsearch
+    - 'sleep 10' # Ensure Elasticsearch is up and running
 script:
     - python plateypus/models.py
     - python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus
