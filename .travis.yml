@@ -14,9 +14,9 @@ install:
     - pip install codecov
     - pip install pipenv
     - pipenv sync
+    - sudo cat /var/log/elasticsearch/elasticsearch.log
     - sudo systemctl status elasticsearch
     - curl -v http://localhost:9200
-    - sudo cat /var/log/elasticsearch/elasticsearch.log
 addons:
     sonarcloud:
         organization: kristian-thy50409
