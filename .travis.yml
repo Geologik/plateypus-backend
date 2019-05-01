@@ -16,6 +16,7 @@ install:
     - pipenv sync
     - sudo systemctl status elasticsearch
     - curl -v http://localhost:9200
+    - sudo cat /var/log/elasticsearch/elasticsearch.log
 addons:
     sonarcloud:
         organization: kristian-thy50409
