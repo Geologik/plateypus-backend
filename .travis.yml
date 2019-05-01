@@ -7,8 +7,8 @@ before_install:
     - sudo systemctl stop elasticsearch
     - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.0-amd64.deb &&
       sudo dpkg -i --force-confnew elasticsearch-7.0.0-amd64.deb
-    - sudo sed -i.old 's/-Xms1g/-Xms128m' /etc/elasticsearch/jvm.options
-    - sudo sed -i.old 's/-Xmx1g/-Xmx128m' /etc/elasticsearch/jvm.options
+    - sudo sed -i.old 's/-Xms1g/-Xms128m/' /etc/elasticsearch/jvm.options
+    - sudo sed -i.old 's/-Xmx1g/-Xmx128m/' /etc/elasticsearch/jvm.options
     - |
         sudo cat <<-EOF >> /etc/elasticsearch/jvm.options
             -XX:+DisableExplicitGC
