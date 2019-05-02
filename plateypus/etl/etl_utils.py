@@ -1,5 +1,7 @@
 """Utility methods for ETL routines."""
 
+from warnings import warn
+
 from ftputil import FTPHost
 from ftputil.error import FTPOSError
 
@@ -15,6 +17,18 @@ def ftp_connect(server, user, passwd, cwd):
         return ftp
     except FTPOSError:
         return None
+
+
+def get_node_text(elem, node_name, nsmap):
+    """Return any text inside the given XML node."""
+    xpath = f".//ns:{node_name}"
+    count = len(elem.findall(xpath, namespaces=nsmap))
+    if count == 0:
+        warn(f"Did not find {node_name}")
+        return ""
+    if count > 1:
+        warn(f"Found {count} {node_name} nodes, only returning text of the first.")
+    return elem.findtext(xpath, namespaces=nsmap)
 
 
 def ls_lt(ftp):

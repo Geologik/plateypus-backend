@@ -5,7 +5,6 @@ from io import TextIOWrapper
 from os.path import join as path_join
 from re import search
 from tempfile import gettempdir
-from warnings import warn
 from xml.etree.ElementTree import XMLPullParser, tostring
 from zipfile import ZipFile, is_zipfile
 
@@ -17,9 +16,14 @@ from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
 try:
-    from etl_utils import ftp_connect, ls_lt, newer_than_latest
+    from etl_utils import ftp_connect, get_node_text, ls_lt, newer_than_latest
 except (ImportError, ModuleNotFoundError):
-    from plateypus.etl.etl_utils import ftp_connect, ls_lt, newer_than_latest
+    from plateypus.etl.etl_utils import (
+        ftp_connect,
+        get_node_text,
+        ls_lt,
+        newer_than_latest,
+    )
 finally:
     from plateypus.helpers import elastic, init_logger, t_0
     from plateypus.models import Metadata, Vehicle
@@ -66,16 +70,16 @@ class Extract:
         filename = newest_file[1]
         last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, utc)
         return "C:/Temp/test.zip", last_modified
-        # return "C:/Temp/ESStatistikListeModtag-20181015-070837.zip"
-        chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
-        if newer_than_latest(DK, last_modified):
-            target = path_join(gettempdir(), filename)
-            indicator = "%(percent).1f%% (done in %(eta_td)s)"
-            progbar = Bar(f"Downloading {filename}", max=chunks, suffix=indicator)
-            self.ftp.download(filename, target, lambda chunk: progbar.next())
-            progbar.finish()
-            return target, last_modified
-        return False, t_0()
+        # return "C:/Temp/ESStatistikListeModtag-20181015-070837.zip", last_modified
+        # chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
+        # if newer_than_latest(DK, last_modified):
+        #     target = path_join(gettempdir(), filename)
+        #     indicator = "%(percent).1f%% (done in %(eta_td)s)"
+        #     progbar = Bar(f"Downloading {filename}", max=chunks, suffix=indicator)
+        #     self.ftp.download(filename, target, lambda chunk: progbar.next())
+        #     progbar.finish()
+        #     return target, last_modified
+        # return False, t_0()
 
     def get_ftp_connection_data(self):
         """Retrieve FTP details for the DMR from the Virk Datahub."""
@@ -114,17 +118,6 @@ class Transform:
         nsmap = {}
         entities = []
 
-        # TODO move to utils
-        def get_node_text(elem, node_name):
-            xpath = f".//ns:{node_name}"
-            count = len(elem.findall(xpath, namespaces=nsmap)) == 1
-            if count == 0:
-                warn(f"Did not find {node_name}")
-                return ""
-            if count > 1:
-                warn(f"Found #{count}# {node_name}")
-            return elem.findtext(xpath, namespaces=nsmap)
-
         for event, elem in self.xml_pull_events():
             if event == "start-ns":
                 namespace, url = elem
@@ -133,18 +126,18 @@ class Transform:
                 if elem.tag == f'{{{nsmap["ns"]}}}Statistik':
                     vehicle = Vehicle(
                         country=DK,
-                        plate=get_node_text(elem, "RegistreringNummerNummer"),
+                        plate=get_node_text(elem, "RegistreringNummerNummer", nsmap),
                         first_reg=get_node_text(
-                            elem, "KoeretoejOplysningFoersteRegistreringDato"
+                            elem, "KoeretoejOplysningFoersteRegistreringDato", nsmap
                         ),
-                        vin=get_node_text(elem, "KoeretoejOplysningStelNummer"),
-                        maker=get_node_text(elem, "KoeretoejMaerkeTypeNavn"),
+                        vin=get_node_text(elem, "KoeretoejOplysningStelNummer", nsmap),
+                        maker=get_node_text(elem, "KoeretoejMaerkeTypeNavn", nsmap),
                         model="{} {}".format(
-                            get_node_text(elem, "KoeretoejModelTypeNavn"),
-                            get_node_text(elem, "KoeretoejVariantTypeNavn"),
+                            get_node_text(elem, "KoeretoejModelTypeNavn", nsmap),
+                            get_node_text(elem, "KoeretoejVariantTypeNavn", nsmap),
                         ),
-                        fuel_type=get_node_text(elem, "DrivkraftTypeNavn"),
-                        colour=get_node_text(elem, "FarveTypeNavn"),
+                        fuel_type=get_node_text(elem, "DrivkraftTypeNavn", nsmap),
+                        colour=get_node_text(elem, "FarveTypeNavn", nsmap),
                         raw_xml=tostring(elem, encoding="unicode"),
                     )
                     LOG.debug(vehicle)
