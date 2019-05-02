@@ -110,8 +110,10 @@ def test_get_node_text_on_empty_node(xml):
     assert actual == expected
 
 
-def test_get_node_text_on_empty_node(xml):
-    """Test that get_node_text on a node found more than once returns the contents of the first encountered node."""
+def test_get_node_text_on_repeating_node(xml):
+    """Test that get_node_text on a node found more than once
+    returns the contents of the first encountered node.
+    """
     expected = "first"
     actual = "bar"
     uri = xml["nsmap"]["ns"]
