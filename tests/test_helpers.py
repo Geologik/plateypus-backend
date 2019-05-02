@@ -18,6 +18,7 @@ TESTING = True
 
 @fixture
 def set_env():
+    """Setup some environment values."""
     environ["CACHE_DEFAULT_TIMEOUT"] = str(CACHE_DEFAULT_TIMEOUT)
     environ["CACHE_TYPE"] = str(CACHE_TYPE)
     environ["ELASTIC_HOST"] = str(ELASTIC_HOST)
@@ -28,6 +29,7 @@ def set_env():
 
 
 def test_init_logger(set_env):
+    """Test initialization of the root logger."""
     logger = helpers.init_logger()
     assert logger.getEffectiveLevel() == WARNING
     environ["LOG_LEVEL"] = str(DEBUG)
@@ -36,14 +38,16 @@ def test_init_logger(set_env):
 
 
 def test_get_setting():
+    """Test that env settings can be retrieved, or if not then a default value is returned."""
     random_key = uuid()
-    foo, bar = "foo", "bar"
-    assert helpers.get_setting(random_key, foo) == foo
-    environ[random_key] = bar
-    assert helpers.get_setting(random_key, foo) == bar
+    default_value, actual_value = "foo", "bar"
+    assert helpers.get_setting(random_key, default_value) == default_value
+    environ[random_key] = actual_value
+    assert helpers.get_setting(random_key, default_value) == actual_value
 
 
 def test_app_settings(set_env):
+    """Test that settings are correctly loaded into the Flask app."""
     cfg = helpers.app_settings()
     assert cfg["CACHE_DEFAULT_TIMEOUT"] == CACHE_DEFAULT_TIMEOUT
     assert cfg["CACHE_TYPE"] == CACHE_TYPE
@@ -52,6 +56,7 @@ def test_app_settings(set_env):
 
 
 def test_elastic_default(set_env):
+    """Test creation of Elasticsearch client."""
     with helpers.elastic() as client:
         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
 
@@ -66,6 +71,9 @@ def test_elastic_default(set_env):
 # def test_elastic_ssl(set_env):
 #     environ["ELASTIC_PROTOCOL"] = "https"
 #     with helpers.elastic() as client:
-#         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
-#     #del environ["ELASTIC_PROTOCOL"]
+#         assert (
+#             str(client)
+#             == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
+#         )
+#     # del environ["ELASTIC_PROTOCOL"]
 #     environ["ELASTIC_PROTOCOL"] = "http"
