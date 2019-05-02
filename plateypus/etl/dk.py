@@ -25,7 +25,7 @@ finally:
     from plateypus.models import Metadata, Vehicle
 
 DK = "dk"
-LOG = init_logger("plateypus.etl")
+LOG = init_logger(__name__)
 
 
 def extract_transform_load():

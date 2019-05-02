@@ -13,6 +13,7 @@ python-dotenv = "*"
 rope = "*"
 
 [packages]
+elastic-apm = {extras = ["flask"],version = "*"}
 elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
 flask = "*"
@@ -21,6 +22,7 @@ ftputil = "*"
 gunicorn = "*"
 packaging = "*"
 progress = "*"
+psutil = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-mock = "*"
