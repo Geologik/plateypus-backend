@@ -2,6 +2,8 @@
 
 from logging import DEBUG, WARNING
 from os import environ
+from pathlib import Path
+from tempfile import gettempdir
 
 from pytest import fixture
 from shortuuid import uuid
@@ -36,6 +38,31 @@ def test_init_logger(set_env):
     logger = helpers.init_logger()
     assert logger.getEffectiveLevel() == DEBUG
 
+    # Teardown
+    environ["LOG_LEVEL"] = str(WARNING)
+
+
+def test_init_logger_default_level():
+    """Test initialization of the root logger when LOG_LEVEL is not set."""
+    logger = helpers.init_logger()
+    assert logger.getEffectiveLevel() == WARNING
+
+
+def test_init_logger_with_logfile(set_env):
+    """Test initialization of a logger with a log file."""
+    log_path = f"{gettempdir()}/{uuid()}.log"
+    assert not Path(log_path).exists()
+    environ["LOG_OUTPUT"] = log_path
+    logger = helpers.init_logger(uuid())
+    msg = "Write to disk."
+    logger.warning(msg)
+    assert Path(log_path).exists()
+    with open(log_path, 'r') as log:
+        assert msg in log.read()
+
+    # Teardown
+    del environ["LOG_OUTPUT"]
+
 
 def test_get_setting():
     """Test that env settings can be retrieved, or if not then a default value is returned."""
@@ -61,19 +88,11 @@ def test_elastic_default(set_env):
         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
 
 
-# def test_elastic_explicit_no_ssl(set_env):
-#     environ["ELASTIC_PROTOCOL"] = "http"
-#     with helpers.elastic() as client:
-#         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
-#     del environ["ELASTIC_PROTOCOL"]
-
-
 # def test_elastic_ssl(set_env):
 #     environ["ELASTIC_PROTOCOL"] = "https"
 #     with helpers.elastic() as client:
-#         assert (
-#             str(client)
-#             == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
-#         )
-#     # del environ["ELASTIC_PROTOCOL"]
+#         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
+#
+#     # Teardown
 #     environ["ELASTIC_PROTOCOL"] = "http"
+#     helpers.elastic()
