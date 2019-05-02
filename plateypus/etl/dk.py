@@ -5,10 +5,10 @@ from io import TextIOWrapper
 from os.path import join as path_join
 from re import search
 from tempfile import gettempdir
-from xml.etree.ElementTree import XMLPullParser, tostring
 from zipfile import ZipFile, is_zipfile
 
 from ftputil.file_transfer import MAX_COPY_CHUNK_SIZE
+from lxml import etree  # nosec <https://github.com/PyCQA/bandit/issues/435>
 from progress.bar import Bar
 from progress.spinner import Spinner
 from pytz import utc
@@ -138,7 +138,7 @@ class Transform:
                         ),
                         fuel_type=get_node_text(elem, "DrivkraftTypeNavn", nsmap),
                         colour=get_node_text(elem, "FarveTypeNavn", nsmap),
-                        raw_xml=tostring(elem, encoding="unicode"),
+                        raw_xml=etree.tostring(elem, encoding="unicode"),
                     )
                     LOG.debug(vehicle)
                     entities.append(vehicle)
@@ -147,7 +147,7 @@ class Transform:
 
     def xml_pull_events(self):
         """Return a list of XML parser events from the data dump."""
-        parser = XMLPullParser(["start-ns", "end"])
+        parser = etree.XMLPullParser(["start-ns", "end"])
         spinner = Spinner("Parsing XML dump … ")
         spinner.next()
         with self.xml_stream() as instream:

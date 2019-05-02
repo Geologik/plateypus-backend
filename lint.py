@@ -2,6 +2,7 @@
 
 from subprocess import run
 
+
 def run_with_separator(args):
     """Print a horizontal rule to console and run a subprocess."""
     print("=" * 80)
@@ -29,7 +30,9 @@ if __name__ == "__main__":
         black = run_with_separator(["black", "."])
 
         if black.returncode == 0:
-            run_with_separator(["pylint", "plateypus"])
+            run_with_separator(
+                ["pylint", "--extension-pkg-whitelist=lxml.etree", "plateypus"]
+            )
             run_with_separator(
                 ["bandit", "--recursive", "--format", "txt", "plateypus"]
             )
