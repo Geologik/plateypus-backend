@@ -10,7 +10,7 @@ before_install:
     - sudo sed -i.old 's/-Xms1g/-Xms128m/' /etc/elasticsearch/jvm.options
     - sudo sed -i.old 's/-Xmx1g/-Xmx128m/' /etc/elasticsearch/jvm.options
     - |
-      cat <<-EOF | sudo tee -a /etc/elasticsearch/jvm.options
+      sudo tee -a /etc/elasticsearch/jvm.options <<-EOF
         -XX:+DisableExplicitGC
         -Djdk.io.permissionsUseCanonicalPath=true
         -Dlog4j.skipJansi=true
