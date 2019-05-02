@@ -1,6 +1,6 @@
 """Test the helpers module."""
 
-from logging import DEBUG, WARNING
+from logging import DEBUG, ERROR, WARNING
 from os import environ
 from pathlib import Path
 from tempfile import gettempdir
@@ -42,10 +42,10 @@ def test_init_logger(set_env):
     environ["LOG_LEVEL"] = str(WARNING)
 
 
-def test_init_logger_default_level():
-    """Test initialization of the root logger when LOG_LEVEL is not set."""
-    logger = helpers.init_logger()
-    assert logger.getEffectiveLevel() == WARNING
+def test_init_logger_explicit_level(set_env):
+    """Test initialization of the root logger with explicit LOG_LEVEL."""
+    logger = helpers.init_logger(lvl=ERROR)
+    assert logger.getEffectiveLevel() == ERROR
 
 
 def test_init_logger_with_logfile(set_env):
@@ -57,7 +57,7 @@ def test_init_logger_with_logfile(set_env):
     msg = "Write to disk."
     logger.warning(msg)
     assert Path(log_path).exists()
-    with open(log_path, 'r') as log:
+    with open(log_path, "r") as log:
         assert msg in log.read()
 
     # Teardown
