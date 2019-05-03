@@ -32,10 +32,8 @@ def info():
 
 
 @PLATEYPUS.route("/favicon.ico")
-@CACHE.cached(timeout=86400)
 def favicon():
     """Return favicon."""
-    LOG.debug(request)
     return send_from_directory(
         join(PLATEYPUS.root_path, "static"),
         "favicon.ico",
@@ -51,5 +49,5 @@ def echo():
     return jsonify(request.json)
 
 
-if __name__ == "__main__":  # pragma: no-cover
+if __name__ == "__main__":  # pragma: no cover
     PLATEYPUS.run()

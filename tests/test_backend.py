@@ -25,6 +25,24 @@ def test_tautology():
     assert 2 + 2 == 4
 
 
+def test_echo(client):
+    """The ``echo'' endpoint should return whatever is sent to it."""
+    payload = dict(foo="bar", baz=42)
+    resp = client.post("/echo", json=payload)
+    assert okay(resp)
+
+    result = resp.get_json(force=True)
+    expected = payload
+    assert result == expected
+
+
+def test_favicon(client):
+    """A favicon should be available at the default URL."""
+    resp = client.get("/favicon.ico")
+    assert okay(resp)
+    assert resp.mimetype == "image/vnd.microsoft.icon"
+
+
 def test_version(client):
     """The ``version'' endpoint should return the version defined in the backend."""
     resp = client.get("/")
@@ -36,15 +54,4 @@ def test_version(client):
         settings=helpers.app_settings(),
         version=str(backend.VERSION),
     )
-    assert result == expected
-
-
-def test_echo(client):
-    """The ``echo'' endpoint should return whatever is sent to it."""
-    payload = dict(foo="bar", baz=42)
-    resp = client.post("/echo", json=payload)
-    assert okay(resp)
-
-    result = resp.get_json(force=True)
-    expected = payload
     assert result == expected
