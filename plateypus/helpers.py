@@ -27,8 +27,6 @@ def elastic():
     host = get_setting("ELASTIC_HOST", "localhost")
     port = get_setting("ELASTIC_PORT", "9200")
     protocol = get_setting("ELASTIC_PROTOCOL", "http")
-    if protocol == "https":
-        raise NotImplementedError
     yield Elasticsearch(f"{protocol}://{host}:{port}")
 
 
