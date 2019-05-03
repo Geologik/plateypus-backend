@@ -23,7 +23,7 @@ try:
         newer_than_latest,
         upsert_metadata,
     )
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):  # pragma: no cover
     from plateypus.etl.etl_utils import (
         ftp_connect,
         get_node_text,

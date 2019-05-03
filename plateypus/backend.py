@@ -9,7 +9,7 @@ from packaging.version import Version
 
 try:
     from helpers import app_settings, init_logger
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):  # pragma: no cover
     from plateypus.helpers import app_settings, init_logger
 
 PLATEYPUS = Flask(__name__)

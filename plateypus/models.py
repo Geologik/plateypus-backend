@@ -4,7 +4,7 @@ from elasticsearch_dsl import Date, Document, Keyword, Text
 
 try:
     from helpers import elastic
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):  # pragma: no cover
     from plateypus.helpers import elastic
 
 
