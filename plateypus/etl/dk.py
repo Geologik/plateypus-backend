@@ -16,17 +16,24 @@ from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
 try:
-    from etl_utils import ftp_connect, get_node_text, ls_lt, newer_than_latest
+    from etl_utils import (
+        ftp_connect,
+        get_node_text,
+        ls_lt,
+        newer_than_latest,
+        upsert_metadata,
+    )
 except (ImportError, ModuleNotFoundError):
     from plateypus.etl.etl_utils import (
         ftp_connect,
         get_node_text,
         ls_lt,
         newer_than_latest,
+        upsert_metadata,
     )
 finally:
     from plateypus.helpers import elastic, init_logger, t_0
-    from plateypus.models import Metadata, Vehicle
+    from plateypus.models import Vehicle
 
 DK = "dk"
 LOG = init_logger(__name__)
@@ -189,11 +196,7 @@ class Load:
                 entity.save(using=client)
             LOG.info("> inserted %i vehicles", len(entities))
 
-            try:
-                meta_dk = Metadata.search(using=client).filter("term", country=DK)
-                meta_dk.execute()[0].update(using=client, last_updated=last_updated)
-            except IndexError:
-                Metadata(country=DK, last_updated=last_updated).save(using=client)
+        upsert_metadata(DK, last_updated)
 
         return True
 

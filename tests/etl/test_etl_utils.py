@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from io import StringIO
+from time import sleep
 from types import SimpleNamespace as obj
 from warnings import warn
 
@@ -9,9 +10,11 @@ from ftputil.error import TemporaryError
 from lxml import etree
 from pytest import fixture, mark, warns
 from pytz import utc
+from shortuuid import uuid
 
 from plateypus.etl import etl_utils
-from plateypus.helpers import t_0
+from plateypus.helpers import elastic, t_0
+from plateypus.models import Metadata
 
 
 @fixture
@@ -139,15 +142,69 @@ def test_ls_lt():
     assert actual == expected
 
 
-# TODO this test requires a fixture with Metadata for dk
-# def test_newer_than_latest():
-#    """Test whether the timestamp is newer than the one in the database."""
-#    assert etl_utils.newer_than_latest("dk", datetime(1970, 1, 1, tzinfo=utc))
-#    assert not etl_utils.newer_than_latest("dk", datetime.now(utc))
+def test_newer_than_latest():
+    """Test whether the timestamp is newer than the one in the database."""
+    country = uuid()
+    etl_utils.upsert_metadata(country, datetime.fromtimestamp(1000000001, utc))
+    sleep(2)
+    assert not etl_utils.newer_than_latest(
+        country, datetime.fromtimestamp(1000000000, utc)
+    )
+    assert etl_utils.newer_than_latest(country, datetime.now(utc))
+
+    # Teardown
+    with elastic() as client:
+        Metadata.search(using=client).filter("term", country=country).delete()
 
 
 def test_newer_than_latest_first_run():
     """Test that newer_than_latest compares to the earliest known time
-    when there is no timestamp for country in the database."""
-    assert etl_utils.newer_than_latest("yy", datetime.now(utc))
-    assert not etl_utils.newer_than_latest("yy", t_0())
+    when there is no timestamp for country in the -database."""
+    country = uuid()
+    assert etl_utils.newer_than_latest(country, datetime.now(utc))
+    assert not etl_utils.newer_than_latest(country, t_0())
+
+
+def test_upsert_metadata():
+    """Test that upsert_metadata inserts or updates data."""
+    country = uuid()
+    datetime_2001 = datetime.fromtimestamp(1000000000, utc)
+    datetime_2033 = datetime.fromtimestamp(2000000000, utc)
+    with elastic() as client:
+        assert (
+            Metadata.search(using=client).filter("term", country=country).count() == 0
+        )
+        etl_utils.upsert_metadata(country, datetime_2001)
+
+    sleep(2)
+    with elastic() as client:
+        assert (
+            Metadata.search(using=client).filter("term", country=country).count() == 1
+        )
+        assert (
+            Metadata.search(using=client)
+            .filter("term", country=country)
+            .execute()[0]
+            .last_updated
+            == datetime_2001
+        )
+        etl_utils.upsert_metadata(country, datetime_2033)
+
+    sleep(2)
+    with elastic() as client:
+        assert (
+            Metadata.search(using=client).filter("term", country=country).count() == 1
+        )
+        assert (
+            Metadata.search(using=client)
+            .filter("term", country=country)
+            .execute()[0]
+            .last_updated
+            == datetime_2033
+        )
+
+    # Teardown
+    with elastic() as client:
+        Metadata.search(using=client).filter("term", country=country).execute()[
+            0
+        ].delete(using=client)

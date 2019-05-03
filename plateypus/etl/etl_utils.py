@@ -48,3 +48,13 @@ def newer_than_latest(country, timestamp):
             last_updated = search.execute()[0].last_updated
 
     return timestamp > last_updated
+
+
+def upsert_metadata(country, last_updated):
+    """Upsert Metadata for the given country."""
+    with elastic() as client:
+        try:
+            meta = Metadata.search(using=client).filter("term", country=country)
+            meta.execute()[0].update(using=client, last_updated=last_updated)
+        except IndexError:
+            Metadata(country=country, last_updated=last_updated).save(using=client)
