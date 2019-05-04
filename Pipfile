@@ -36,6 +36,7 @@ shortuuid = "*"
 python_version = "3.7"
 
 [scripts]
+dk = "python -m plateypus.etl.dk"
 debug = "cmd /C \"SET APP_SETTINGS=config.TestingConfig&& python -m pytest -x --pdb\""
 elastic = "python elastic.py"
 flask = "python plateypus/backend.py"
