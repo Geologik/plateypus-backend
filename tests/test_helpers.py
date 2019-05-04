@@ -1,58 +1,38 @@
 """Test the helpers module."""
 
 from logging import DEBUG, ERROR, WARNING
-from os import environ
 from pathlib import Path
+from random import choice, randint
+from secrets import token_urlsafe
 from tempfile import gettempdir
 
-from pytest import fixture
 from shortuuid import uuid
 
 from plateypus import helpers
 
-CACHE_DEFAULT_TIMEOUT = 123
-CACHE_TYPE = "simple"
-ELASTIC_HOST = "localhost"
-ELASTIC_PORT = "9200"
-FLASK_SECRET_KEY = uuid()
-TESTING = True
 
-
-@fixture
-def set_env():
-    """Setup some environment values."""
-    environ["CACHE_DEFAULT_TIMEOUT"] = str(CACHE_DEFAULT_TIMEOUT)
-    environ["CACHE_TYPE"] = str(CACHE_TYPE)
-    environ["ELASTIC_HOST"] = str(ELASTIC_HOST)
-    environ["ELASTIC_PORT"] = str(ELASTIC_PORT)
-    environ["FLASK_SECRET_KEY"] = str(FLASK_SECRET_KEY)
-    environ["FLASK_TESTING"] = str(TESTING)
-    environ["LOG_LEVEL"] = str(WARNING)
-
-
-def test_init_logger(set_env):
-    """Test initialization of the root logger."""
+def test_init_logger(monkeypatch):
+    """Test initialization of the root logger with default values."""
+    monkeypatch.delenv("LOG_LEVEL", raising=False)
+    monkeypatch.delenv("LOG_OUTPUT", raising=False)
     logger = helpers.init_logger()
     assert logger.getEffectiveLevel() == WARNING
-    environ["LOG_LEVEL"] = str(DEBUG)
+    monkeypatch.setenv("LOG_LEVEL", str(DEBUG))
     logger = helpers.init_logger()
     assert logger.getEffectiveLevel() == DEBUG
 
-    # Teardown
-    environ["LOG_LEVEL"] = str(WARNING)
 
-
-def test_init_logger_explicit_level(set_env):
+def test_init_logger_explicit_level():
     """Test initialization of the root logger with explicit LOG_LEVEL."""
-    logger = helpers.init_logger(lvl=ERROR)
+    logger = helpers.init_logger(uuid(), lvl=ERROR)
     assert logger.getEffectiveLevel() == ERROR
 
 
-def test_init_logger_with_logfile(set_env):
+def test_init_logger_with_logfile(monkeypatch):
     """Test initialization of a logger with a log file."""
     log_path = f"{gettempdir()}/{uuid()}.log"
     assert not Path(log_path).exists()
-    environ["LOG_OUTPUT"] = log_path
+    monkeypatch.setenv("LOG_OUTPUT", log_path)
     logger = helpers.init_logger(uuid())
     msg = "Write to disk."
     logger.warning(msg)
@@ -60,39 +40,56 @@ def test_init_logger_with_logfile(set_env):
     with open(log_path, "r") as log:
         assert msg in log.read()
 
-    # Teardown
-    del environ["LOG_OUTPUT"]
 
-
-def test_get_setting():
+def test_get_setting(monkeypatch):
     """Test that env settings can be retrieved, or if not then a default value is returned."""
     random_key = uuid()
     default_value, actual_value = "foo", "bar"
     assert helpers.get_setting(random_key, default_value) == default_value
-    environ[random_key] = actual_value
+    monkeypatch.setenv(random_key, actual_value)
     assert helpers.get_setting(random_key, default_value) == actual_value
 
 
-def test_app_settings(set_env):
+def test_app_settings(monkeypatch):
     """Test that settings are correctly loaded into the Flask app."""
+    cache_default_timeout = randint(100, 1200)
+    cache_type = choice(["null", "simple", "redis"])
+    flask_secret_key = token_urlsafe(16)
+    testing = bool(randint(0, 1))
+    monkeypatch.setenv("CACHE_DEFAULT_TIMEOUT", str(cache_default_timeout))
+    monkeypatch.setenv("CACHE_TYPE", cache_type)
+    monkeypatch.setenv("FLASK_SECRET_KEY", flask_secret_key)
+    monkeypatch.setenv("FLASK_TESTING", str(testing))
+
     cfg = helpers.app_settings()
-    assert cfg["CACHE_DEFAULT_TIMEOUT"] == CACHE_DEFAULT_TIMEOUT
-    assert cfg["CACHE_TYPE"] == CACHE_TYPE
-    assert cfg["SECRET_KEY"] == FLASK_SECRET_KEY
-    assert cfg["TESTING"] == TESTING
+    assert cfg["CACHE_DEFAULT_TIMEOUT"] == cache_default_timeout
+    assert cfg["CACHE_TYPE"] == cache_type
+    assert cfg["SECRET_KEY"] == flask_secret_key
+    assert cfg["TESTING"] == testing
 
 
-def test_elastic_default(set_env):
+def test_elastic_default(monkeypatch):
     """Test creation of Elasticsearch client."""
+    elastic_host = uuid().lower()
+    elastic_port = str(randint(1024, 65535))
+    monkeypatch.setenv("ELASTIC_HOST", elastic_host)
+    monkeypatch.setenv("ELASTIC_PORT", elastic_port)
     with helpers.elastic() as client:
-        assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200}])>"
+        assert (
+            str(client)
+            == f"<Elasticsearch([{{'host': '{elastic_host}', 'port': {elastic_port}}}])>"
+        )
 
 
-# def test_elastic_ssl(set_env):
-#     environ["ELASTIC_PROTOCOL"] = "https"
-#     with helpers.elastic() as client:
-#         assert str(client) == "<Elasticsearch([{'host': 'localhost', 'port': 9200, 'use_ssl': True}])>"
-#
-#     # Teardown
-#     environ["ELASTIC_PROTOCOL"] = "http"
-#     helpers.elastic()
+def test_elastic_ssl(monkeypatch):
+    """Test creation of HTTPS Elasticsearch client."""
+    elastic_host = uuid().lower()
+    elastic_port = str(randint(1024, 65535))
+    monkeypatch.setenv("ELASTIC_HOST", elastic_host)
+    monkeypatch.setenv("ELASTIC_PORT", str(elastic_port))
+    monkeypatch.setenv("ELASTIC_PROTOCOL", "https")
+    with helpers.elastic() as client:
+        assert (
+            str(client)
+            == f"<Elasticsearch([{{'host': '{elastic_host}', 'port': {elastic_port}, 'use_ssl': True}}])>"
+        )
