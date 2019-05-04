@@ -21,7 +21,7 @@ addons:
 before_script:
     - 'sleep 10' # Ensure Elasticsearch is up and running
 script:
-    - python plateypus/models.py
+    - python -m plateypus.models
     - python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov-report xml --cov=plateypus
 after_success:
     - codecov
