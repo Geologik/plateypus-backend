@@ -76,7 +76,7 @@ class Extract:
         newest_file = ls_lt(self.ftp)[-1]
         filename = newest_file[1]
         last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, utc)
-        return "C:/Temp/test.zip", last_modified
+        return "./tests/testdata/testdata_dk.zip", last_modified
         # return "C:/Temp/ESStatistikListeModtag-20181015-070837.zip", last_modified
         # chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
         # if newer_than_latest(DK, last_modified):
@@ -173,7 +173,10 @@ class Transform:
             with ZipFile(self.dump, "r") as zipf:
                 infolist = zipf.infolist()
                 if len(infolist) == 1:
-                    return TextIOWrapper(zipf.open(infolist[0].filename, "r"))
+                    return TextIOWrapper(
+                        zipf.open(infolist[0].filename, "r"), encoding="utf-8"
+                    )
+        LOG.error("Could not open %s as XML stream!", self.dump)
         return None
 
 
