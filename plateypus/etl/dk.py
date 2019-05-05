@@ -1,9 +1,12 @@
 """Load data from the Danish Motor Register (DMR)."""
 
 from datetime import datetime
+from errno import ENOSPC
 from io import TextIOWrapper
+from os import strerror
 from os.path import join as path_join
 from re import search
+from shutil import disk_usage
 from tempfile import gettempdir
 from zipfile import ZipFile, is_zipfile
 
@@ -49,7 +52,7 @@ def extract_transform_load():
     if not entities:
         LOG.info("No entities parsed from data dump. Exiting.")
         return False
-    if not Load().insert(entities, last_updated):
+    if not Load.insert(entities, last_updated):
         LOG.info("No data loaded. Exiting.")
     LOG.info("Done.")
     return True
@@ -75,18 +78,24 @@ class Extract:
 
         newest_file = ls_lt(self.ftp)[-1]
         filename = newest_file[1]
+        filesize = newest_file[0].st_size
         last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, utc)
-        return "./tests/testdata/testdata_dk.zip", last_modified
-        # return "C:/Temp/ESStatistikListeModtag-20181015-070837.zip", last_modified
-        # chunks = round(newest_file[0].st_size / MAX_COPY_CHUNK_SIZE)
-        # if newer_than_latest(DK, last_modified):
-        #     target = path_join(gettempdir(), filename)
-        #     indicator = "%(percent).1f%% (done in %(eta_td)s)"
-        #     progbar = Bar(f"Downloading {filename}", max=chunks, suffix=indicator)
-        #     self.ftp.download(filename, target, lambda chunk: progbar.next())
-        #     progbar.finish()
-        #     return target, last_modified
-        # return False, t_0()
+        chunks = round(filesize / MAX_COPY_CHUNK_SIZE)
+        if newer_than_latest(DK, last_modified):
+            if filesize > disk_usage(gettempdir()).free:
+                raise OSError(
+                    ENOSPC,
+                    strerror(ENOSPC),
+                    "%s (%.1f GB)" % (filename, filesize / 1024 ** 3),
+                )
+            target = path_join(gettempdir(), filename)
+            indicator = "%(percent).1f%% (done in %(eta_td)s)"
+            progbar = Bar(f"Downloading {filename}", max=chunks, suffix=indicator)
+            LOG.info("Downloading %s (%.1f GB)", filename, filesize / 1024 ** 3)
+            self.ftp.download(filename, target, lambda chunk: progbar.next())
+            progbar.finish()
+            return target, last_modified
+        return False, t_0()
 
     def get_ftp_connection_data(self):
         """Retrieve FTP details for the DMR from the Virk Datahub."""
@@ -183,16 +192,18 @@ class Transform:
 class Load:
     """Methods to insert data into the database."""
 
-    def clean(self):
+    @staticmethod
+    def clean():
         """Delete all Danish vehicles."""
         with elastic() as client:
             vehicles = Vehicle.search(using=client).filter("term", country=DK)
             LOG.info("> deleting %i vehicles", vehicles.count())
             vehicles.delete()
 
-    def insert(self, entities, last_updated):
+    @staticmethod
+    def insert(entities, last_updated):
         """Insert entities into database."""
-        self.clean()
+        Load.clean()
 
         with elastic() as client:
             for entity in entities:
