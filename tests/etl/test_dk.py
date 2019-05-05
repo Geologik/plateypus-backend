@@ -1,11 +1,13 @@
 """Test ETL routines for the Danish Motor Register."""
 
 from io import TextIOWrapper
+from os import fdopen, remove
 from os.path import dirname, normpath, realpath
-from tempfile import SpooledTemporaryFile
+from tempfile import mkstemp
 
 from pytest import mark
 from pytest_mock import mocker
+from shortuuid import uuid
 
 from plateypus.etl.dk import Extract, Transform, extract_transform_load
 from plateypus.helpers import t_0
@@ -56,10 +58,12 @@ def test_metadata_connection_error():
 
 def test_xml_stream_not_zipfile():
     """None is returned if trying to read a non-zipfile."""
-    with SpooledTemporaryFile(max_size=1024, suffix=".zip") as nonzipf:
-        nonzipf.rollover()
-        trf = Transform(nonzipf.name)
-        assert trf.xml_stream() is None
+    fdesc, path = mkstemp(prefix=uuid(), suffix=".zip")
+    with fdopen(fdesc, "w") as nonzipf:
+        nonzipf.write("Ceci n'est pas une zipfile.\n")
+    trf = Transform(path)
+    assert trf.xml_stream() is None
+    remove(path)
 
 
 def test_xml_stream():
