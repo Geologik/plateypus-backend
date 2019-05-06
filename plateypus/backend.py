@@ -4,19 +4,18 @@ from os.path import join
 
 from elasticapm.contrib.flask import ElasticAPM
 from flask import Flask, jsonify, request, send_from_directory
-from flask_caching import Cache
+from flask.logging import create_logger
 from packaging.version import Version
 
 try:
-    from helpers import app_settings, init_logger
+    from helpers import app_settings
 except (ImportError, ModuleNotFoundError):  # pragma: no cover
-    from plateypus.helpers import app_settings, init_logger
+    from plateypus.helpers import app_settings
 
 PLATEYPUS = Flask(__name__)
 PLATEYPUS.config.from_mapping(app_settings())
+LOG = create_logger(PLATEYPUS)
 APM = ElasticAPM(PLATEYPUS)
-CACHE = Cache(PLATEYPUS)
-LOG = init_logger(__name__)
 VERSION = Version("0.0.1")
 
 

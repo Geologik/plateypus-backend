@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d82c5c6f0b0715bde7d53f545fedcabcebc5594c29509242cbc3f4e9440a42ed"
+            "sha256": "cd974808ced8d855ed11955445c5159cdf8b81f5a2a4259e920f948db85000de"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -145,28 +145,12 @@
             "index": "pypi",
             "version": "==1.0.2"
         },
-        "flask-caching": {
-            "hashes": [
-                "sha256:a21c3e98badfea57c9e91e3485ec0b0c029261ae4badbac876a65a834db6c368",
-                "sha256:cc25b0800fb0ae4e3fcaaf12203263c564f41197593283669b81216089803a1b"
-            ],
-            "index": "pypi",
-            "version": "==1.7.1"
-        },
         "ftputil": {
             "hashes": [
                 "sha256:374b01e174079e91babe2a462fbd6f6c00dbfbfa299dec04239ca4229fbf8762"
             ],
             "index": "pypi",
             "version": "==3.4"
-        },
-        "gunicorn": {
-            "hashes": [
-                "sha256:aa8e0b40b4157b36a5df5e599f45c9c76d6af43845ba3b3b0efe2c70473c2471",
-                "sha256:fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3"
-            ],
-            "index": "pypi",
-            "version": "==19.9.0"
         },
         "idna": {
             "hashes": [
@@ -326,6 +310,7 @@
                 "sha256:2b097cde81a302e1047331b48cadacf23577e431b61e9c6f49a1170bbe3d3da6",
                 "sha256:e00ea4fdde970725482f1f35630d12f074e121a23801aabf2ae154ec6bdd343a"
             ],
+            "index": "pypi",
             "version": "==2.7.1"
         },
         "pytest-mock": {
