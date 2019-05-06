@@ -8,7 +8,7 @@
 [![Updates](https://pyup.io/repos/github/Geologik/plateypus-backend/shield.svg)](https://pyup.io/repos/github/Geologik/plateypus-backend/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
-Backend service for the [Plateypus app](https://github.com/Geologik/plateypus).
+Backend service for the [Plateypus app](https://github.com/Geologik/plateypus-app).
 
 ## Configuration
 
