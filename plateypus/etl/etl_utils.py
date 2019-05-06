@@ -6,7 +6,16 @@ from ftputil import FTPHost
 from ftputil.error import FTPOSError
 
 from plateypus.helpers import elastic, t_0
-from plateypus.models import Metadata
+from plateypus.models import Metadata, Vehicle
+
+
+def clean_vehicles(country):
+    """Delete all vehicles from given country."""
+    with elastic() as client:
+        search = Vehicle.search(using=client).filter("term", country=country)
+        count = search.count()
+        search.delete()
+        return count
 
 
 def ftp_connect(server, user, passwd, cwd):
@@ -29,6 +38,18 @@ def get_node_text(elem, node_name, nsmap):
     if count > 1:
         warn(f"Found {count} {node_name} nodes, only returning text of the first.")
     return elem.findtext(xpath, namespaces=nsmap)
+
+
+def load_vehicles(country, vehicles, last_updated):
+    """Load list of vehicles from given country into database."""
+    clean_vehicles(country)
+
+    with elastic() as client:
+        for vehicle in vehicles:
+            vehicle.save(using=client)
+
+    upsert_metadata(country, last_updated)
+    return True
 
 
 def ls_lt(ftp):

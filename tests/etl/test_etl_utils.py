@@ -1,5 +1,6 @@
 """Test ETL utility methods."""
 
+from collections import namedtuple
 from datetime import datetime
 from io import StringIO
 from time import sleep
@@ -14,7 +15,18 @@ from shortuuid import uuid
 
 from plateypus.etl import etl_utils
 from plateypus.helpers import elastic, t_0
-from plateypus.models import Metadata
+from plateypus.models import Metadata, Vehicle
+
+
+@fixture
+def seven_vehicles():
+    """Create a list of 7 vehicles and return a ``country, vehicles'' tuple."""
+    country = uuid()
+    vehicles = []
+    for _ in range(0, 7):
+        vehicles.append(Vehicle(country=country, plate=uuid()))
+    CountryVehicles = namedtuple("CountryVehicles", ["country", "vehicles"])
+    return CountryVehicles(country, vehicles)
 
 
 @fixture
@@ -37,6 +49,18 @@ def xml():
     parser.close()
     events = parser.read_events()
     yield dict(events=events, nsmap=nsmap)
+
+
+def test_clean_vehicles():
+    """Verify that ``clean_vehicles'' deletes all vehicles from the given country."""
+    country = uuid()
+    with elastic() as client:
+        Vehicle(country=country, plate=uuid()).save(using=client)
+        sleep(2)
+        assert Vehicle.search(using=client).filter("term", country=country).count() == 1
+        etl_utils.clean_vehicles(country=country)
+        sleep(2)
+        assert Vehicle.search(using=client).filter("term", country=country).count() == 0
 
 
 @mark.filterwarnings("ignore:.*use_list_a_option.*:DeprecationWarning")
@@ -125,6 +149,23 @@ def test_get_node_text_on_repeating_node(xml):
             with warns(UserWarning, match="Found 2 twinnode nodes"):
                 actual = etl_utils.get_node_text(elem, "twinnode", xml["nsmap"])
     assert actual == expected
+
+
+def test_load_vehicles(seven_vehicles):
+    """Test that 7 vehicles are present after loading."""
+    etl_utils.load_vehicles(
+        seven_vehicles.country, seven_vehicles.vehicles, datetime.now(utc)
+    )
+    sleep(2)
+
+    with elastic() as client:
+        search = Vehicle.search(using=client).filter(
+            "term", country=seven_vehicles.country
+        )
+        assert search.count() == 7
+
+        # Teardown
+        search.delete()
 
 
 def test_ls_lt():

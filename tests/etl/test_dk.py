@@ -12,9 +12,7 @@ from shortuuid import uuid
 from plateypus.etl.dk import Extract, Transform, extract_transform_load
 from plateypus.helpers import t_0
 
-PATH_TO_TESTDATA = normpath(
-    f"{dirname(realpath(__file__))}/../testdata/testdata_dk.zip"
-)
+PATH_TO_TESTDATA = normpath(f"{dirname(realpath(__file__))}/../testdata")
 
 # region Extract
 
@@ -56,8 +54,16 @@ def test_metadata_connection_error():
 # region Transform
 
 
-def test_xml_stream_not_zipfile():
-    """None is returned if trying to read a non-zipfile."""
+def test_xml_stream():
+    """A ``TextIOWrapper'' is returned if a zipfile is provided."""
+    trf = Transform(PATH_TO_TESTDATA + "/testdata_dk.zip")
+    xml_stream = trf.xml_stream()
+    assert isinstance(xml_stream, TextIOWrapper)
+    assert xml_stream.encoding == "utf-8"
+
+
+def test_xml_stream_multi_zipfile():
+    """None is returned if trying to read a zipfile with more than one file inside."""
     fdesc, path = mkstemp(prefix=uuid(), suffix=".zip")
     with fdopen(fdesc, "w") as nonzipf:
         nonzipf.write("Ceci n'est pas une zipfile.\n")
@@ -66,16 +72,10 @@ def test_xml_stream_not_zipfile():
     remove(path)
 
 
-def test_xml_stream():
-    """A ``TextIOWrapper'' is returned if a zipfile is provided."""
-    trf = Transform(PATH_TO_TESTDATA)
-    xml_stream = trf.xml_stream()
-    assert isinstance(xml_stream, TextIOWrapper)
-    assert xml_stream.encoding == "utf-8"
+def test_xml_stream_not_zipfile():
+    """None is returned if trying to read a non-zipfile."""
+    trf = Transform(PATH_TO_TESTDATA + "/contains_two_files.zip")
+    assert trf.xml_stream() is None
 
-
-# endregion
-
-# region Load
 
 # endregion

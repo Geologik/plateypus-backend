@@ -22,17 +22,17 @@ try:
     from etl_utils import (
         ftp_connect,
         get_node_text,
+        load_vehicles,
         ls_lt,
         newer_than_latest,
-        upsert_metadata,
     )
 except (ImportError, ModuleNotFoundError):  # pragma: no cover
     from plateypus.etl.etl_utils import (
         ftp_connect,
         get_node_text,
+        load_vehicles,
         ls_lt,
         newer_than_latest,
-        upsert_metadata,
     )
 finally:
     from plateypus.helpers import elastic, init_logger, t_0
@@ -52,7 +52,7 @@ def extract_transform_load():
     if not entities:
         LOG.info("No entities parsed from data dump. Exiting.")
         return False
-    if not Load.insert(entities, last_updated):
+    if not load_vehicles(DK, entities, last_updated):
         LOG.info("No data loaded. Exiting.")
     LOG.info("Done.")
     return True
@@ -187,32 +187,6 @@ class Transform:
                     )
         LOG.error("Could not open %s as XML stream!", self.dump)
         return None
-
-
-class Load:
-    """Methods to insert data into the database."""
-
-    @staticmethod
-    def clean():
-        """Delete all Danish vehicles."""
-        with elastic() as client:
-            vehicles = Vehicle.search(using=client).filter("term", country=DK)
-            LOG.info("> deleting %i vehicles", vehicles.count())
-            vehicles.delete()
-
-    @staticmethod
-    def insert(entities, last_updated):
-        """Insert entities into database."""
-        Load.clean()
-
-        with elastic() as client:
-            for entity in entities:
-                entity.save(using=client)
-            LOG.info("> inserted %i vehicles", len(entities))
-
-        upsert_metadata(DK, last_updated)
-
-        return True
 
 
 if __name__ == "__main__":
