@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "cd974808ced8d855ed11955445c5159cdf8b81f5a2a4259e920f948db85000de"
+            "sha256": "e560cf1d0f2875315cd954a3e644ffc4294cc4b3d7b344857dd0606711839c23"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -30,11 +30,12 @@
             ],
             "version": "==19.1.0"
         },
-        "blinker": {
+        "cerberus": {
             "hashes": [
-                "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"
+                "sha256:7ffefb2ea4159040750ae6e8e8d85660d3ccb8895926b95c90508b803aaad029"
             ],
-            "version": "==1.4"
+            "index": "pypi",
+            "version": "==1.3"
         },
         "certifi": {
             "hashes": [
@@ -100,26 +101,6 @@
                 "sha256:fc5f4d209733750afd2714e9109816a29500718b32dd9a5db01c0cb3a019b96a"
             ],
             "version": "==4.5.3"
-        },
-        "elastic-apm": {
-            "extras": [
-                "flask"
-            ],
-            "hashes": [
-                "sha256:3b5bc1646745ae81435c30822de848acf55579215d6fe3ab3b4d110d87297737",
-                "sha256:4517116d7d11f2f0b64254b196cc7ca251e92b1ed4fe08b294a575b15953a89c",
-                "sha256:7924f4eaa43612a59d094403d007bc701664c219ef2c579b10105780e68f9228",
-                "sha256:a968da6b23f5adadcf7f63cdfe0002e4f0c14e249a2bbef374eacfdf55c64bfb",
-                "sha256:af24b7b827f181e44a885e0ac8c049e8f7ed2daf22b74128b4161d64e58e397d",
-                "sha256:c0df4ee3e5a9bb1694f658f91767ce45cf875164c15d82958d5e48183f1a963f",
-                "sha256:c4b084ed7f6da3a6d6dc67a81c54b90afbd31bc556a02fe443fc4c861066415d",
-                "sha256:e49f1c6c09acadcb3239964181ca9554969fc78d38a02631ec1eb5d51c8ba631",
-                "sha256:e8a9f1a2f51f1afd5a386d28470c134097978d81e81196dee7a228341f6e1502",
-                "sha256:ef996617c87280eb6bd15d1e47d122871e83aff4892ae06e84aa5167cb06ec48",
-                "sha256:faed83fa367a8aca746537311be38cb6908c0a7890a62cbe95a607319f26c3d3"
-            ],
-            "index": "pypi",
-            "version": "==4.2.2"
         },
         "elasticsearch": {
             "hashes": [

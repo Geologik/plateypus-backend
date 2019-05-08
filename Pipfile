@@ -13,7 +13,7 @@ python-dotenv = "*"
 rope = "*"
 
 [packages]
-elastic-apm = {extras = ["flask"],version = "*"}
+cerberus = "*"
 elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
 flask = "*"
