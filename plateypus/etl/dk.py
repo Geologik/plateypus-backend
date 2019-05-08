@@ -35,7 +35,7 @@ except (ImportError, ModuleNotFoundError):  # pragma: no cover
         newer_than_latest,
     )
 finally:
-    from plateypus.helpers import elastic, init_logger, t_0
+    from plateypus.helpers import init_logger, t_0
     from plateypus.models import Vehicle
 
 DK = "dk"
