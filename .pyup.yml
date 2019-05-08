@@ -1,4 +1,4 @@
-update: insecure
+update: all
 pr_prefix: pyup
 requirements:
     - Pipfile
