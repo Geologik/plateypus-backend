@@ -25,6 +25,12 @@ def test_tautology():
     assert 2 + 2 == 4
 
 
+def test_testing():
+    """Assert that we are always running tests in test mode."""
+    testing = backend.PLATEYPUS.config["TESTING"]
+    assert testing and isinstance(testing, bool)
+
+
 def test_echo(client):
     """The ``echo'' endpoint should return whatever is sent to it."""
     payload = dict(foo="bar", baz=42)

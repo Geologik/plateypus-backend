@@ -35,9 +35,9 @@ python_version = "3.7"
 
 [scripts]
 dk = "python -m plateypus.etl.dk"
-debug = "cmd /C \"SET APP_SETTINGS=config.TestingConfig&& python -m pytest -x --pdb\""
+debug = "cmd /C \"SET FLASK_TESTING=True&& python -m pytest -x --pdb\""
 elastic = "python -m scripts.elastic"
 flask = "python plateypus/backend.py"
 keygen = "python -c \"import secrets; print(secrets.token_urlsafe(16))\""
 lint = "python -m scripts.lint"
-test = "cmd /C \"SET APP_SETTINGS=config.TestingConfig&& python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov=plateypus\""
+test = "cmd /C \"SET FLASK_TESTING=True&& python -m pytest --cov-branch --cov-report term-missing:skip-covered --cov=plateypus\""
