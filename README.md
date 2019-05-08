@@ -16,7 +16,6 @@ The Plateypus backend is configured using environment variables. User-controllab
 
 | Key                     | Description | Default |
 | ----------------------- | ----------- | ------- |
-| `APM_PATH`              | Path to a folder containing the `apm-server` executable. Only intended for use in a development environment. | |
 | `CACHE_DEFAULT_TIMEOUT` | Cache default timeout in seconds. | `600` |
 | `CACHE_REDIS_URL`       | URL to connect to Redis server, e.g. `redis://usr:pwd@localhost:6379/2`. Only used if `CACHE_TYPE` is `redis`. | |
 | `CACHE_TYPE`            | Specifies which type of caching to use. See [Configuring Flask-Caching](https://flask-caching.readthedocs.io/en/latest/#configuring-flask-caching) for more information. Supported values are `null`, `simple` and `redis`. | `null` |
@@ -36,7 +35,7 @@ The project's `Pipfile` defines a number of scripts, which can be run in a comma
 Script    | Description
 --------- | -----------
 `debug`   | Execute unit tests, dropping to the `pdb` debugger on the first error. *Windows only.*
-`elastic` | Start clean dockerized [Elasticsearch](https://elastic.co/products/elasticsearch) and [Kibana](https://elastic.co/products/kibana) servers, as well as an [APM Server](https://elastic.co/solutions/apm) if the `APM_PATH` environment variable is set.
+`elastic` | Start clean dockerized [Elasticsearch](https://elastic.co/products/elasticsearch) server.
 `flask`   | Start a local development server.
 `keygen`  | Generate a key suitable for use with the `FLASK_SECRET_KEY` setting.
 `lint`    | Run a chain of analysis tools and linters: `isort` → `black` → `pylint` → `bandit`.
