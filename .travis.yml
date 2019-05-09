@@ -3,6 +3,8 @@ sudo: required
 language: python
 python: 
     - '3.7'
+git:
+    depth: false
 before_install:
     - curl -s -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.1-amd64.deb
     - sudo dpkg -i --force-confnew elasticsearch-7.0.1-amd64.deb
