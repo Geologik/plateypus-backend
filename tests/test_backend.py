@@ -49,6 +49,28 @@ def test_favicon(client):
     assert resp.mimetype == "image/vnd.microsoft.icon"
 
 
+def test_vehicle(client):
+    """Vehicle details are returned."""
+    resp = client.get("/vehicle/xyz")
+    assert resp.status_code == 404
+    resp = client.get("/vehicle/e1kQhWoBN_WOEmZuPkLx")
+    assert okay(resp)
+
+
+def test_search(client):
+    """Search should return something."""
+    payload = dict(fields=dict(country="dk", maker="AUDI"))
+    resp = client.post("/search", json=payload)
+    assert okay(resp)
+
+
+def test_search_bad_request(client):
+    """Submitting a malformed search request should result in HTTP error code 400."""
+    payload = dict(foo="bar", baz=42)
+    resp = client.post("/search", json=payload)
+    assert resp.status_code == 400
+
+
 def test_version(client):
     """The ``version'' endpoint should return the version defined in the backend."""
     resp = client.get("/")

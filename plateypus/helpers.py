@@ -7,6 +7,7 @@ from logging import DEBUG, FileHandler, Formatter, StreamHandler, getLogger
 from os import environ
 from sys import stdout
 
+from cerberus import Validator
 from elasticsearch import Elasticsearch
 from pytz import utc
 
@@ -66,6 +67,22 @@ def init_logger(logger=None, lvl=None):
     logger.setLevel(lvl)
 
     return logger
+
+
+def search_validator():
+    """Return a search request validator."""
+    schema = dict(
+        fields=dict(
+            type="dict",
+            keysrules=dict(
+                type="string", allowed=["country", "plate", "vin", "maker", "model"]
+            ),
+            valuesrules=dict(type="string", empty=False),
+            empty=False,
+            required=True,
+        )
+    )
+    return Validator(schema)
 
 
 def t_0():

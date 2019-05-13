@@ -1,5 +1,6 @@
 """Test the helpers module."""
 
+from json import loads
 from logging import DEBUG, ERROR, WARNING
 from pathlib import Path
 from random import choice, randint
@@ -83,13 +84,34 @@ def test_elastic_default(monkeypatch):
 
 def test_elastic_ssl(monkeypatch):
     """Test creation of HTTPS Elasticsearch client."""
-    elastic_host = uuid().lower()
-    elastic_port = str(randint(1024, 65535))
-    monkeypatch.setenv("ELASTIC_HOST", elastic_host)
-    monkeypatch.setenv("ELASTIC_PORT", str(elastic_port))
+    host = uuid().lower()
+    port = str(randint(1024, 65535))
+    monkeypatch.setenv("ELASTIC_HOST", host)
+    monkeypatch.setenv("ELASTIC_PORT", str(port))
     monkeypatch.setenv("ELASTIC_PROTOCOL", "https")
     with helpers.elastic() as client:
         assert (
             str(client)
-            == f"<Elasticsearch([{{'host': '{elastic_host}', 'port': {elastic_port}, 'use_ssl': True}}])>"
+            == f"<Elasticsearch([{{'host': '{host}', 'port': {port}, 'use_ssl': True}}])>"
         )
+
+
+def test_search_validator_bad_data():
+    """Check that malformed search requests are rejected."""
+    sval = helpers.search_validator()
+    assert not sval.validate({})
+    bad = dict(foo="bar", baz=42)
+    assert not sval.validate(bad)
+    bad = loads('{"fields": {}}')
+    assert not sval.validate(bad)
+    bad = loads('{"fields": {"vin": ""}}')
+    assert not sval.validate(bad)
+    bad = loads('{"fields": {"foo": "bar"}}')
+    assert not sval.validate(bad)
+
+
+def test_search_validator_good_data():
+    """Check that valid search requests are recognized."""
+    sval = helpers.search_validator()
+    good = '{"fields": {"country": "DK", "plate": "BC69432"}}'
+    assert sval.validate(loads(good))
