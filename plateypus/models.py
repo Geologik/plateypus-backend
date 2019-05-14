@@ -2,7 +2,7 @@
 
 from elasticsearch_dsl import Date, Document, Keyword, Text
 
-try:
+try:  # pragma: no cover
     from helpers import elastic
 except (ImportError, ModuleNotFoundError):  # pragma: no cover
     from plateypus.helpers import elastic

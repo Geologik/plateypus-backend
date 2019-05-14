@@ -10,7 +10,7 @@ from packaging.version import Version
 try:  # pragma: no cover
     from models import Vehicle
     from helpers import app_settings, elastic, search_validator, build_query
-except (ImportError, ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):  # pragma: no cover
     from plateypus.models import Vehicle
     from plateypus.helpers import app_settings, elastic, search_validator, build_query
 

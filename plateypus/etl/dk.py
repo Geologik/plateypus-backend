@@ -18,7 +18,7 @@ from pytz import utc
 from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
 
-try:
+try:  # pragma: no cover
     from etl_utils import (
         ftp_connect,
         get_node_text,
@@ -189,5 +189,5 @@ class Transform:
         return None
 
 
-if __name__ == "__main__":
-    extract_transform_load()  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
+    extract_transform_load()
