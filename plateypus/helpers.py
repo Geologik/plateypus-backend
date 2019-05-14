@@ -9,6 +9,7 @@ from sys import stdout
 
 from cerberus import Validator
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Q
 from pytz import utc
 
 
@@ -20,6 +21,18 @@ def app_settings():
         SECRET_KEY=get_setting("FLASK_SECRET_KEY"),
         TESTING=(get_setting("FLASK_TESTING", "False").capitalize() == "True"),
     )
+
+
+def build_query(field, fields, fuzziness="AUTO"):
+    """Build an Elasticsearch query term"""
+    val = fields[field]
+    if "*" in val:
+        qtype = "wildcard"
+        fval = val
+    else:
+        qtype = "match"
+        fval = dict(query=val, fuzziness=fuzziness)
+    return Q(qtype, **{field: fval})
 
 
 @contextmanager

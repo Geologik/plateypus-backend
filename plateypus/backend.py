@@ -7,12 +7,12 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask.logging import create_logger
 from packaging.version import Version
 
-try:
+try:  # pragma: no cover
     from models import Vehicle
-    from helpers import app_settings, elastic, search_validator
-except (ImportError, ModuleNotFoundError):  # pragma: no cover
+    from helpers import app_settings, elastic, search_validator, build_query
+except (ImportError, ModuleNotFoundError):
     from plateypus.models import Vehicle
-    from plateypus.helpers import app_settings, elastic, search_validator
+    from plateypus.helpers import app_settings, elastic, search_validator, build_query
 
 PLATEYPUS = Flask(__name__)
 PLATEYPUS.config.from_mapping(app_settings())
@@ -62,21 +62,10 @@ def search():
         if "country" in fields:
             _search = _search.filter("term", country=fields["country"])
         if "plate" in fields:
-            _search = _search.query(
-                "match", plate=dict(query=fields["plate"], fuzziness="2")
-            )
-        if "vin" in fields:
-            _search = _search.query(
-                "match", vin=dict(query=fields["vin"], fuzziness="AUTO")
-            )
-        if "maker" in fields:
-            _search = _search.query(
-                "match", maker=dict(query=fields["maker"], fuzziness="AUTO")
-            )
-        if "model" in fields:
-            _search = _search.query(
-                "match", model=dict(query=fields["model"], fuzziness="AUTO")
-            )
+            _search = _search.query(build_query("plate", fields, "2"))
+        for field in ("maker", "model", "vin"):
+            if field in fields:
+                _search = _search.query(build_query(field, fields))
         return jsonify([hit.to_dict() for hit in _search.execute()["hits"]["hits"]])
 
 
