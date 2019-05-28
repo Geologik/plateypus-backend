@@ -9,6 +9,7 @@ black = "==19.3b0"
 isort = "*"
 jedi = "*"
 pylint = "*"
+pysnooper = "*"
 python-dotenv = "*"
 rope = "*"
 
@@ -35,7 +36,7 @@ python_version = "3.7"
 
 [scripts]
 dk = "python -m plateypus.etl.dk"
-debug = "cmd /C \"SET FLASK_TESTING=True&& python -m pytest -x --pdb\""
+debug = "cmd /C \"SET FLASK_TESTING=True&& python -m pytest --exitfirst --pdb\""
 elastic = "python -m scripts.elastic"
 flask = "python plateypus/backend.py"
 keygen = "python -c \"import secrets; print(secrets.token_urlsafe(16))\""

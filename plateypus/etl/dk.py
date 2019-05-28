@@ -14,6 +14,7 @@ from ftputil.file_transfer import MAX_COPY_CHUNK_SIZE
 from lxml import etree  # nosec <https://github.com/PyCQA/bandit/issues/435>
 from progress.bar import Bar
 from progress.spinner import Spinner
+from pysnooper import snoop
 from pytz import utc
 from requests import get
 from requests.exceptions import ConnectionError as RequestsConnectionError
@@ -81,6 +82,8 @@ class Extract:
         filesize = newest_file[0].st_size
         last_modified = datetime.fromtimestamp(newest_file[0].st_mtime, utc)
         chunks = round(filesize / MAX_COPY_CHUNK_SIZE)
+        # return "./tests/testdata/testdata_dk.zip", last_modified
+        # return "C:/Temp/ESStatistikListeModtag-20181015-070837.zip", last_modified
         if newer_than_latest(DK, last_modified):
             if filesize > disk_usage(gettempdir()).free:
                 raise OSError(
@@ -129,6 +132,7 @@ class Transform:
     def __init__(self, path_to_dump):
         self.dump = path_to_dump
 
+    @snoop
     def build_from_xml(self):
         """Return a list of entities from the data dump."""
         nsmap = {}
