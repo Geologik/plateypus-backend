@@ -19,6 +19,7 @@ elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
 flask = "*"
 ftputil = "*"
+importlib-metadata = "*" # Apparently needed by pluggy but not loaded as a dependency. Should be in stdlib in py-3.8.
 lxml = "*"
 packaging = "*"
 progress = "*"
