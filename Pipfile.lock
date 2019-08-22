@@ -433,10 +433,10 @@
         },
         "gitpython": {
             "hashes": [
-                "sha256:556b64796c5e268b35e3b431a429e813ad54aa178e1baaec2a9ba82e8575a89e",
-                "sha256:629867ebf609cef21bb9d849039e281e25963fb7d714a2f6bacc1ecce4800293"
+                "sha256:947cc75913e7b6da108458136607e2ee0e40c20be1e12d4284e7c6c12956c276",
+                "sha256:d2f4945f8260f6981d724f5957bc076398ada55cb5d25aaee10108bcdc894100"
             ],
-            "version": "==3.0.0"
+            "version": "==3.0.2"
         },
         "isort": {
             "hashes": [
