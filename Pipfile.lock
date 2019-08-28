@@ -505,10 +505,10 @@
         },
         "pysnooper": {
             "hashes": [
-                "sha256:ca91e943aec0de6dec6fc3ff68917c643aa879f4dc4409baa979a0fd38cdb844",
-                "sha256:eb4e9e951cb3432236a749a03367eec952c48f72a603cfc172fd542b584dfd22"
+                "sha256:232c9a660cd1fb835886586e20676b14638c11363dc5d42bc2b574e5cb14bc70",
+                "sha256:dec166a5865d082a969758780c2ca85e4e7606fa8af30e59c0ac60071586a78d"
             ],
-            "version": "==0.2.5"
+            "version": "==0.2.6"
         },
         "python-dotenv": {
             "hashes": [
