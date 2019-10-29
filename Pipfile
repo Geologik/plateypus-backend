@@ -1,11 +1,14 @@
 [[source]]
+
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+
 [dev-packages]
+
 bandit = "*"
-black = "==19.3b0"
+black = "==19.10b0"
 isort = "*"
 jedi = "*"
 pylint = "*"
@@ -13,13 +16,15 @@ pysnooper = "*"
 python-dotenv = "*"
 rope = "*"
 
+
 [packages]
+
 cerberus = "*"
 elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
 flask = "*"
 ftputil = "*"
-importlib-metadata = "*" # Apparently needed by pluggy but not loaded as a dependency. Should be in stdlib in py-3.8.
+importlib-metadata = "*"
 lxml = "*"
 packaging = "*"
 progress = "*"
@@ -32,10 +37,14 @@ pytz = "*"
 requests = "*"
 shortuuid = "*"
 
+
 [requires]
+
 python_version = "3.7"
 
+
 [scripts]
+
 dk = "python -m plateypus.etl.dk"
 debug = "cmd /C \"SET FLASK_TESTING=True&& python -m pytest --exitfirst --pdb\""
 elastic = "python -m scripts.elastic"
