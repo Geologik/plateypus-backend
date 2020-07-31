@@ -105,10 +105,10 @@
         },
         "elasticsearch": {
             "hashes": [
-                "sha256:0140787216646e1eb7eb001f8146aff7071d7ca438854249787b6cc221ddd266",
-                "sha256:283a6afa5dc08c21016c295b5237fbd9c74895b0b297ceb97c879ec7d67a5f47"
+                "sha256:2ffbd746fc7d2db08e5ede29c822483705f29c4bf43b0875c238637d5d843d44",
+                "sha256:92b534931865a186906873f75ae0b91808ff5036b0f2b9269eb5f6dc09644b55"
             ],
-            "version": "==7.1.0"
+            "version": "==7.8.1"
         },
         "elasticsearch-dsl": {
             "hashes": [
