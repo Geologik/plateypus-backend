@@ -13,9 +13,8 @@ if __name__ == "__main__":
     isort = run_with_separator(
         [
             "isort",
-            "--apply",
+            ".",
             "--atomic",
-            "--recursive",
             "--combine-as",
             "--combine-star",
             "--multi-line=3",
