@@ -8,7 +8,7 @@ verify_ssl = true
 [dev-packages]
 
 bandit = "*"
-black = "==19.10b0"
+black = "==20.8b1"
 isort = "*"
 jedi = "*"
 pylint = "*"
@@ -25,6 +25,7 @@ elasticsearch-dsl = ">=7.0.0"
 flask = "*"
 ftputil = "*"
 importlib-metadata = "*"
+iniconfig = "*"
 lxml = "*"
 packaging = "*"
 progress = "*"
@@ -40,7 +41,7 @@ shortuuid = "*"
 
 [requires]
 
-python_version = "3.7"
+python_version = "3.9"
 
 
 [scripts]
