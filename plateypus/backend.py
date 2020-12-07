@@ -8,11 +8,11 @@ from flask.logging import create_logger
 from packaging.version import Version
 
 try:  # pragma: no cover
+    from helpers import app_settings, build_query, elastic, search_validator
     from models import Vehicle
-    from helpers import app_settings, elastic, search_validator, build_query
 except (ImportError, ModuleNotFoundError):  # pragma: no cover
+    from plateypus.helpers import app_settings, build_query, elastic, search_validator
     from plateypus.models import Vehicle
-    from plateypus.helpers import app_settings, elastic, search_validator, build_query
 
 PLATEYPUS = Flask(__name__)
 PLATEYPUS.config.from_mapping(app_settings())
