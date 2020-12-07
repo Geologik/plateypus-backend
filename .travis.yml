@@ -1,8 +1,9 @@
 dist: xenial
 sudo: required
 language: python
-python: 
+python:
     - '3.7'
+    - '3.9'
 git:
     depth: false
 cache: pip
