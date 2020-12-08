@@ -101,7 +101,18 @@ class Extract:
         return False, t_0()
 
     def get_ftp_connection_data(self):
-        """Retrieve FTP details for the DMR from the Virk Datahub."""
+        """Retrieve FTP details for the DMR from the Virk Datahub.
+
+        TODO: as of December 2020 the Virk Datahub is dead with no
+        apparent replacement for the endpoint I used. The info can be
+        scraped off https://skat.dk/skat.aspx?oid=2111623 but for now
+        I'll hardcode it."""
+        return dict(
+            user="dmr-ftp-user",
+            passwd="dmrpassword",
+            server="5.44.137.84",
+            cwd="ESStatistikListeModtag",
+        )
         try:
             resp = get(self.METADATA_URL)
             metadata = resp.json()
