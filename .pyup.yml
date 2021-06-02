@@ -1,5 +1,8 @@
 update: all
-pr_prefix: pyup
+schedule: "every week on monday"
 requirements:
-    - Pipfile
-    - Pipfile.lock
+  - Pipfile
+  - Pipfile.lock
+assignees:
+  - kthy
+pr_prefix: pyup
