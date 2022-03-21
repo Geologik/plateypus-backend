@@ -456,11 +456,10 @@
         },
         "astroid": {
             "hashes": [
-                "sha256:4db03ab5fc3340cf619dbc25e42c2cc3755154ce6009469766d7143d1fc2ee4e",
-                "sha256:8a398dfce302c13f14bab13e2b14fe385d32b73f4e4853b9bdfb64598baa1975"
+                "sha256:d56f6a5239981567ceaa3413d4971936c7b4b0c796fcff90c24254dcf8b05b62",
+                "sha256:e59b9d0788aa8ded1a49172ff5d4cd26d5d5aa9cb2dacd50a03a3bbf05d3cc92"
             ],
-            "markers": "python_version ~= '3.6'",
-            "version": "==2.5.6"
+            "version": "==2.11.0"
         },
         "bandit": {
             "hashes": [
