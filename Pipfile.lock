@@ -121,10 +121,9 @@
         },
         "ftputil": {
             "hashes": [
-                "sha256:394997ccb3cd4825c6e22b5e349c62cf5016c35db4d60940f3513db66d205561"
+                "sha256:9b86ee67c1980ce1d89b13752bc48b9493fee06349cb476828594e76e08f8488"
             ],
-            "index": "pypi",
-            "version": "==5.0.1"
+            "version": "==5.0.3"
         },
         "idna": {
             "hashes": [
