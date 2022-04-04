@@ -1,23 +1,18 @@
 [[source]]
-
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-
 [dev-packages]
-
 bandit = "*"
-black = "==21.5b2"
+black = "==22.1.0"
 isort = "*"
 jedi = "*"
 pylint = "*"
 python-dotenv = "*"
 rope = "*"
 
-
 [packages]
-
 cerberus = "*"
 elasticsearch = ">=7.0.0"
 elasticsearch-dsl = ">=7.0.0"
@@ -38,16 +33,12 @@ pytz = "*"
 requests = "*"
 shortuuid = "*"
 
-
 [requires]
-
 python_version = "3.9"
 
-
 [scripts]
-
-dk = "python -m plateypus.etl.dk"
 debug = "cmd /C \"SET FLASK_TESTING=True&& python -m pytest --exitfirst --pdb\""
+dk = "python -m plateypus.etl.dk"
 elastic = "python -m scripts.elastic"
 flask = "python plateypus/backend.py"
 keygen = "python -c \"import secrets; print(secrets.token_urlsafe(16))\""
