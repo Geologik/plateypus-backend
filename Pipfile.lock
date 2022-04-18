@@ -346,10 +346,10 @@
         },
         "pysnooper": {
             "hashes": [
-                "sha256:0fa932ad396d2bac089d4b1f94f0ce49cde4140ee64ddd24a4065fadea10fcc9",
-                "sha256:985c0dddf701e1d69d25534ffd45fc02f2877b58bcb5788fb017077c65896bfa"
+                "sha256:378f13d731a3e04d3d0350e5f295bdd0f1b49fc8a8b8bf2067fe1e5290bd20be",
+                "sha256:d17dc91cca1593c10230dce45e46b1d3ff0f8910f0c38e941edf6ba1260b3820"
             ],
-            "version": "==1.1.0"
+            "version": "==1.1.1"
         },
         "pytest": {
             "hashes": [
