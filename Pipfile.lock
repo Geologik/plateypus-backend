@@ -100,10 +100,10 @@
         },
         "elasticsearch": {
             "hashes": [
-                "sha256:70d4ab4a4dcfc2631aaaf58853984b3e7658b85a490f4d2d2c657e91437bb620",
-                "sha256:d092f4a0d3f4228753cd06d4f70438aec101e13206b31425910d807ec23f232b"
+                "sha256:1ca41710ed460acfe3d1724a5a2aefbda24564abb10c03e38e71575183d390fb",
+                "sha256:b7d119911e5bf4286cd3155aa93ad0e6b001f637e05f8ec4bf18ee585c1cacfb"
             ],
-            "version": "==8.1.3"
+            "version": "==8.2.0"
         },
         "elasticsearch-dsl": {
             "hashes": [
@@ -402,10 +402,10 @@
         },
         "shortuuid": {
             "hashes": [
-                "sha256:44a7a86bcf24dbaba2e626cf80c779926b7c3a0d31a3a013e0d3cd1077707d23",
-                "sha256:9435e87e5a64f3b92f7110c81f989a3b7bdb9358e22d2359829167da476cfc23"
+                "sha256:459f12fa1acc34ff213b1371467c0325169645a31ed989e268872339af7563d5",
+                "sha256:b2bb9eb7773170e253bb7ba25971023acb473517a8b76803d9618668cb1dd46f"
             ],
-            "version": "==1.0.8"
+            "version": "==1.0.9"
         },
         "six": {
             "hashes": [
@@ -455,10 +455,10 @@
         },
         "astroid": {
             "hashes": [
-                "sha256:561dc6015eecce7e696ff7e3b40434bc56831afeff783f0ea853e19c4f635c06",
-                "sha256:da0632b7c046d8361dfe1b1abb2e085a38624961fabe2997565a9c06c1be9d9a"
+                "sha256:14ffbb4f6aa2cf474a0834014005487f7ecd8924996083ab411e7fa0b508ce0b",
+                "sha256:f4e4ec5294c4b07ac38bab9ca5ddd3914d4bf46f9006eb5c0ae755755061044e"
             ],
-            "version": "==2.11.4"
+            "version": "==2.11.5"
         },
         "bandit": {
             "hashes": [
@@ -604,10 +604,10 @@
         },
         "pbr": {
             "hashes": [
-                "sha256:27108648368782d07bbf1cb468ad2e2eeef29086affd14087a6d04b7de8af4ec",
-                "sha256:66bc5a34912f408bb3925bf21231cb6f59206267b7f63f3503ef865c1a292e25"
+                "sha256:e547125940bcc052856ded43be8e101f63828c2d94239ffbe2b327ba3d5ccf0a",
+                "sha256:e8dca2f4b43560edef58813969f52a56cef023146cbb8931626db80e6c1c4308"
             ],
-            "version": "==5.8.1"
+            "version": "==5.9.0"
         },
         "pylint": {
             "hashes": [
