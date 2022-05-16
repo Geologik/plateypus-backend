@@ -121,9 +121,9 @@
         },
         "ftputil": {
             "hashes": [
-                "sha256:9b86ee67c1980ce1d89b13752bc48b9493fee06349cb476828594e76e08f8488"
+                "sha256:6889db8649dd20d9b6d40a6c5f0f84ccf340a7dac1e0bfc0f0024090fc2afb33"
             ],
-            "version": "==5.0.3"
+            "version": "==5.0.4"
         },
         "idna": {
             "hashes": [
