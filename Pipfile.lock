@@ -53,11 +53,8 @@
             "version": "==6.4.3"
         },
         "elasticsearch": {
-            "hashes": [
-                "sha256:bd6c3b8c751114f42c0265646a202da0f00f6337a9e334b4abc60ef03d1aad7c",
-                "sha256:c29e9e59bfbe345f4a03877e5087aa93fdf7556ef538f52ebdfc26a89bbcdbb1"
-            ],
-            "version": "==8.3.1"
+            "hashes": [],
+            "version": "==8.3.3"
         },
         "elasticsearch-dsl": {
             "hashes": [
