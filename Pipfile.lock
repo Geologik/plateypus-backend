@@ -601,7 +601,7 @@
         },
         "regex": {
             "hashes": [],
-            "version": "==2022.7.24"
+            "version": "==2022.7.25"
         },
         "rope": {
             "hashes": [
