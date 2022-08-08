@@ -350,7 +350,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==63.2.0"
+            "version": "==63.4.2"
         },
         "shortuuid": {
             "hashes": [
