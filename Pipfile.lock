@@ -17,11 +17,8 @@
     },
     "default": {
         "attrs": {
-            "hashes": [
-                "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4",
-                "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"
-            ],
-            "version": "==21.4.0"
+            "hashes": [],
+            "version": "==22.1.0"
         },
         "cerberus": {
             "hashes": [
@@ -53,14 +50,11 @@
         },
         "coverage": {
             "hashes": [],
-            "version": "==6.4.2"
+            "version": "==6.4.3"
         },
         "elasticsearch": {
-            "hashes": [
-                "sha256:bd6c3b8c751114f42c0265646a202da0f00f6337a9e334b4abc60ef03d1aad7c",
-                "sha256:c29e9e59bfbe345f4a03877e5087aa93fdf7556ef538f52ebdfc26a89bbcdbb1"
-            ],
-            "version": "==8.3.1"
+            "hashes": [],
+            "version": "==8.3.3"
         },
         "elasticsearch-dsl": {
             "hashes": [
@@ -71,7 +65,7 @@
         },
         "flask": {
             "hashes": [],
-            "version": "==2.1.3"
+            "version": "==2.2.1"
         },
         "ftputil": {
             "hashes": [
@@ -356,7 +350,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==63.2.0"
+            "version": "==63.4.2"
         },
         "shortuuid": {
             "hashes": [
@@ -383,11 +377,11 @@
         },
         "urllib3": {
             "hashes": [],
-            "version": "==1.26.10"
+            "version": "==1.26.11"
         },
         "werkzeug": {
             "hashes": [],
-            "version": "==2.2.0"
+            "version": "==2.2.1"
         },
         "zipp": {
             "hashes": [],
@@ -607,14 +601,11 @@
         },
         "regex": {
             "hashes": [],
-            "version": "==2022.7.24"
+            "version": "==2022.7.25"
         },
         "rope": {
-            "hashes": [
-                "sha256:14e2e9b74ff345d038988fd62b7ef4226351e4a1181123596abb3a147fea9019",
-                "sha256:f762542c9cfe52124aa55d33822a269fc4b0da70fe3170c6086de2733ed52f22"
-            ],
-            "version": "==1.2.0"
+            "hashes": [],
+            "version": "==1.3.0"
         },
         "six": {
             "hashes": [
