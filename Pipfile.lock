@@ -65,7 +65,7 @@
         },
         "flask": {
             "hashes": [],
-            "version": "==2.2.1"
+            "version": "==2.2.2"
         },
         "ftputil": {
             "hashes": [
@@ -335,11 +335,8 @@
             "version": "==2.8.2"
         },
         "pytz": {
-            "hashes": [
-                "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7",
-                "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"
-            ],
-            "version": "==2022.1"
+            "hashes": [],
+            "version": "==2022.2.1"
         },
         "requests": {
             "hashes": [
@@ -350,7 +347,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==63.4.2"
+            "version": "==65.0.0"
         },
         "shortuuid": {
             "hashes": [
@@ -381,7 +378,7 @@
         },
         "werkzeug": {
             "hashes": [],
-            "version": "==2.2.1"
+            "version": "==2.2.2"
         },
         "zipp": {
             "hashes": [],
@@ -543,11 +540,8 @@
             "version": "==0.9.0"
         },
         "pbr": {
-            "hashes": [
-                "sha256:e547125940bcc052856ded43be8e101f63828c2d94239ffbe2b327ba3d5ccf0a",
-                "sha256:e8dca2f4b43560edef58813969f52a56cef023146cbb8931626db80e6c1c4308"
-            ],
-            "version": "==5.9.0"
+            "hashes": [],
+            "version": "==5.10.0"
         },
         "pylint": {
             "hashes": [],
