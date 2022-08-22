@@ -374,7 +374,7 @@
         },
         "urllib3": {
             "hashes": [],
-            "version": "==1.26.11"
+            "version": "==1.26.12"
         },
         "werkzeug": {
             "hashes": [],
