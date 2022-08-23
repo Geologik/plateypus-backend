@@ -50,7 +50,7 @@
         },
         "coverage": {
             "hashes": [],
-            "version": "==6.4.3"
+            "version": "==6.4.4"
         },
         "elasticsearch": {
             "hashes": [],
@@ -347,7 +347,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==65.0.0"
+            "version": "==65.2.0"
         },
         "shortuuid": {
             "hashes": [
@@ -374,7 +374,7 @@
         },
         "urllib3": {
             "hashes": [],
-            "version": "==1.26.11"
+            "version": "==1.26.12"
         },
         "werkzeug": {
             "hashes": [],
@@ -595,7 +595,7 @@
         },
         "regex": {
             "hashes": [],
-            "version": "==2022.7.25"
+            "version": "==2022.8.17"
         },
         "rope": {
             "hashes": [],
