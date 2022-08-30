@@ -54,7 +54,7 @@
         },
         "elasticsearch": {
             "hashes": [],
-            "version": "==8.3.3"
+            "version": "==8.4.0"
         },
         "elasticsearch-dsl": {
             "hashes": [
@@ -347,7 +347,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==65.2.0"
+            "version": "==65.3.0"
         },
         "shortuuid": {
             "hashes": [
@@ -395,7 +395,7 @@
         },
         "astroid": {
             "hashes": [],
-            "version": "==2.12.2"
+            "version": "==2.12.5"
         },
         "bandit": {
             "hashes": [
@@ -545,7 +545,7 @@
         },
         "pylint": {
             "hashes": [],
-            "version": "==2.14.5"
+            "version": "==2.15.0"
         },
         "python-dotenv": {
             "hashes": [
