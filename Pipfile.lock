@@ -51,7 +51,7 @@
         },
         "elasticsearch": {
             "hashes": [],
-            "version": "==8.4.0"
+            "version": "==8.4.1"
         },
         "elasticsearch-dsl": {
             "hashes": [
