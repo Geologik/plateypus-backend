@@ -523,7 +523,7 @@
         },
         "regex": {
             "hashes": [],
-            "version": "==2022.9.11"
+            "version": "==2022.9.13"
         },
         "rope": {
             "hashes": [],
