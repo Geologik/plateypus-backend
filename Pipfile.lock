@@ -29,7 +29,7 @@
         },
         "certifi": {
             "hashes": [],
-            "version": "==2022.6.15.1"
+            "version": "==2022.9.14"
         },
         "chardet": {
             "hashes": [
