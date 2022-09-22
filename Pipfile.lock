@@ -29,7 +29,7 @@
         },
         "certifi": {
             "hashes": [],
-            "version": "==2022.6.15.1"
+            "version": "==2022.9.14"
         },
         "chardet": {
             "hashes": [
@@ -71,11 +71,8 @@
             "version": "==5.0.4"
         },
         "idna": {
-            "hashes": [
-                "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff",
-                "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"
-            ],
-            "version": "==3.3"
+            "hashes": [],
+            "version": "==3.4"
         },
         "importlib-metadata": {
             "hashes": [
@@ -356,7 +353,7 @@
         },
         "astroid": {
             "hashes": [],
-            "version": "==2.12.9"
+            "version": "==2.12.10"
         },
         "bandit": {
             "hashes": [
@@ -479,7 +476,7 @@
         },
         "pylint": {
             "hashes": [],
-            "version": "==2.15.2"
+            "version": "==2.15.3"
         },
         "python-dotenv": {
             "hashes": [],
@@ -526,7 +523,7 @@
         },
         "regex": {
             "hashes": [],
-            "version": "==2022.9.11"
+            "version": "==2022.9.13"
         },
         "rope": {
             "hashes": [],
