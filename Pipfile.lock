@@ -305,7 +305,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==65.3.0"
+            "version": "==65.4.0"
         },
         "shortuuid": {
             "hashes": [
