@@ -277,7 +277,7 @@
         },
         "pytest-mock": {
             "hashes": [],
-            "version": "==3.8.2"
+            "version": "==3.9.0"
         },
         "python-dateutil": {
             "hashes": [
