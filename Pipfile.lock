@@ -299,7 +299,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==65.4.1"
+            "version": "==65.5.0"
         },
         "shortuuid": {
             "hashes": [
@@ -377,7 +377,7 @@
         },
         "gitpython": {
             "hashes": [],
-            "version": "==3.1.28"
+            "version": "==3.1.29"
         },
         "isort": {
             "hashes": [
@@ -538,7 +538,7 @@
         },
         "stevedore": {
             "hashes": [],
-            "version": "==4.0.0"
+            "version": "==4.0.1"
         },
         "toml": {
             "hashes": [
