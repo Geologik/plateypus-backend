@@ -288,7 +288,7 @@
         },
         "pytz": {
             "hashes": [],
-            "version": "==2022.4"
+            "version": "==2022.5"
         },
         "requests": {
             "hashes": [
