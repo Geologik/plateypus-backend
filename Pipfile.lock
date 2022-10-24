@@ -467,7 +467,7 @@
         },
         "pylint": {
             "hashes": [],
-            "version": "==2.15.4"
+            "version": "==2.15.5"
         },
         "python-dotenv": {
             "hashes": [],
