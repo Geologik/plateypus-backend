@@ -47,11 +47,11 @@
         },
         "coverage": {
             "hashes": [],
-            "version": "==6.4.4"
+            "version": "==6.5.0"
         },
         "elasticsearch": {
             "hashes": [],
-            "version": "==8.4.2"
+            "version": "==8.4.3"
         },
         "elasticsearch-dsl": {
             "hashes": [
@@ -75,11 +75,8 @@
             "version": "==3.4"
         },
         "importlib-metadata": {
-            "hashes": [
-                "sha256:637245b8bab2b6502fcbc752cc4b7a6f6243bb02b31c5c26156ad103d3d45670",
-                "sha256:7401a975809ea1fdc658c3aa4f78cc2195a0e019c5cbc4c06122884e9ae80c23"
-            ],
-            "version": "==4.12.0"
+            "hashes": [],
+            "version": "==5.0.0"
         },
         "iniconfig": {
             "hashes": [
@@ -246,7 +243,7 @@
         },
         "psutil": {
             "hashes": [],
-            "version": "==5.9.2"
+            "version": "==5.9.3"
         },
         "py": {
             "hashes": [
@@ -275,15 +272,12 @@
             "version": "==7.1.3"
         },
         "pytest-cov": {
-            "hashes": [
-                "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6",
-                "sha256:e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470"
-            ],
-            "version": "==3.0.0"
+            "hashes": [],
+            "version": "==4.0.0"
         },
         "pytest-mock": {
             "hashes": [],
-            "version": "==3.8.2"
+            "version": "==3.10.0"
         },
         "python-dateutil": {
             "hashes": [
@@ -294,7 +288,7 @@
         },
         "pytz": {
             "hashes": [],
-            "version": "==2022.2.1"
+            "version": "==2022.5"
         },
         "requests": {
             "hashes": [
@@ -305,7 +299,7 @@
         },
         "setuptools": {
             "hashes": [],
-            "version": "==65.4.0"
+            "version": "==65.5.0"
         },
         "shortuuid": {
             "hashes": [
@@ -340,7 +334,7 @@
         },
         "zipp": {
             "hashes": [],
-            "version": "==3.8.1"
+            "version": "==3.10.0"
         }
     },
     "develop": {
@@ -353,7 +347,7 @@
         },
         "astroid": {
             "hashes": [],
-            "version": "==2.12.10"
+            "version": "==2.12.12"
         },
         "bandit": {
             "hashes": [
@@ -364,7 +358,7 @@
         },
         "black": {
             "hashes": [],
-            "version": "==22.8.0"
+            "version": "==22.10.0"
         },
         "click": {
             "hashes": [
@@ -382,11 +376,8 @@
             "version": "==4.0.9"
         },
         "gitpython": {
-            "hashes": [
-                "sha256:1c885ce809e8ba2d88a29befeb385fcea06338d3640712b59ca623c220bb5704",
-                "sha256:5b68b000463593e05ff2b261acff0ff0972df8ab1b70d3cdbd41b546c8b8fc3d"
-            ],
-            "version": "==3.1.27"
+            "hashes": [],
+            "version": "==3.1.29"
         },
         "isort": {
             "hashes": [
@@ -472,11 +463,11 @@
         },
         "pbr": {
             "hashes": [],
-            "version": "==5.10.0"
+            "version": "==5.11.0"
         },
         "pylint": {
             "hashes": [],
-            "version": "==2.15.3"
+            "version": "==2.15.5"
         },
         "python-dotenv": {
             "hashes": [],
@@ -527,7 +518,7 @@
         },
         "rope": {
             "hashes": [],
-            "version": "==1.3.0"
+            "version": "==1.4.0"
         },
         "six": {
             "hashes": [
@@ -547,7 +538,7 @@
         },
         "stevedore": {
             "hashes": [],
-            "version": "==4.0.0"
+            "version": "==4.1.0"
         },
         "toml": {
             "hashes": [
@@ -558,11 +549,8 @@
             "version": "==0.10.2"
         },
         "typing-extensions": {
-            "hashes": [
-                "sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02",
-                "sha256:e6d2677a32f47fc7eb2795db1dd15c1f34eff616bcaf2cfb5e997f854fa1c4a6"
-            ],
-            "version": "==4.3.0"
+            "hashes": [],
+            "version": "==4.4.0"
         },
         "wrapt": {
             "hashes": [
