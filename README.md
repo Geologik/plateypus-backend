@@ -1,10 +1,8 @@
 # Plateypus Backend
 
-[![Python 3](https://pyup.io/repos/github/Geologik/plateypus-backend/python-3-shield.svg)](https://pyup.io/repos/github/Geologik/plateypus-backend/)
 [![Build Status](https://travis-ci.com/Geologik/plateypus-backend.svg?branch=main)](https://travis-ci.com/Geologik/plateypus-backend)
 [![Codecov Status](https://codecov.io/gh/Geologik/plateypus-backend/branch/main/graph/badge.svg)](https://codecov.io/gh/Geologik/plateypus-backend)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=plateypus-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=plateypus-backend)
-[![Requirements Status](https://requires.io/github/Geologik/plateypus-backend/requirements.svg?branch=main)](https://requires.io/github/Geologik/plateypus-backend/requirements/?branch=main)
 [![Updates](https://pyup.io/repos/github/Geologik/plateypus-backend/shield.svg)](https://pyup.io/repos/github/Geologik/plateypus-backend/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
