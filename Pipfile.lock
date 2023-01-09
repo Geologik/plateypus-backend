@@ -170,7 +170,7 @@
         },
         "packaging": {
             "hashes": [],
-            "version": "==22.0"
+            "version": "==23.0"
         },
         "pluggy": {
             "hashes": [
@@ -411,7 +411,7 @@
         },
         "packaging": {
             "hashes": [],
-            "version": "==22.0"
+            "version": "==23.0"
         },
         "parso": {
             "hashes": [
