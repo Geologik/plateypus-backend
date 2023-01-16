@@ -253,7 +253,7 @@
         },
         "pytz": {
             "hashes": [],
-            "version": "==2022.7"
+            "version": "==2022.7.1"
         },
         "requests": {
             "hashes": [
